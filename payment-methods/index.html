@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings — Rakuten</title>
+  <link rel="stylesheet" href="./radiant-foundations.css">
+  <link rel="stylesheet" href="./radiant-components.css">
+  <style>
+    body {
+      background: var(--fill-light);
+      min-height: 100vh;
+    }
+
+    /* ── Page layout ── */
+    .page-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 80px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 192px;
+      flex-shrink: 0;
+    }
+    .sidebar-greeting .sidebar-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .sidebar-greeting .sidebar-cashback {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .sidebar-greeting .sidebar-since {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 12px;
+    }
+    .sidebar-refer {
+      display: inline-block;
+      border: 1.5px solid var(--fill-brand);
+      color: var(--fill-brand);
+      border-radius: 9999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 16px;
+      font-family: inherit;
+      background: transparent;
+    }
+    .sidebar-refer:hover { background: var(--fill-cta-secondary); }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .sidebar-nav-item:hover { background: var(--state-hover); color: var(--text-primary); }
+    .sidebar-nav-item.active { color: var(--fill-brand); font-weight: 700; background: var(--fill-cta-secondary); }
+    .sidebar-nav-icon { font-size: 14px; width: 18px; text-align: center; }
+
+    /* ── Main ── */
+    .main { flex: 1; min-width: 0; }
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin: 28px 0 10px;
+    }
+    .section-eyebrow:first-of-type { margin-top: 0; }
+
+    /* ── Settings card ── */
+    .settings-card {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-default);
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      width: 110px;
+      flex-shrink: 0;
+    }
+    .settings-row-value {
+      font-size: 13px;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+
+    /* ── Mode selector ── */
+    .mode-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .mode-card {
+      background: var(--fill-default);
+      border: 2px solid var(--border-default);
+      border-radius: 14px;
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      position: relative;
+      user-select: none;
+    }
+    .mode-card:hover { border-color: #d4a8f5; }
+    .mode-card.active {
+      border-color: var(--fill-brand);
+      background: #faf5ff;
+      box-shadow: 0 0 0 3px #e9d5ff;
+    }
+    .mode-card-check {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-default);
+      background: var(--fill-default);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .mode-card.active .mode-card-check {
+      background: var(--fill-brand);
+      border-color: var(--fill-brand);
+    }
+    .mode-card-check::after {
+      content: '';
+      width: 6px; height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+      display: none;
+    }
+    .mode-card.active .mode-card-check::after { display: block; }
+    .mode-card-icon { font-size: 22px; margin-bottom: 8px; line-height: 1; }
+    .mode-card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .mode-card-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 15px;
+    }
+    .mode-card-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      margin-top: 6px;
+    }
+
+    /* ── Panels ── */
+    .panel { display: none; }
+    .panel.visible { display: block; }
+
+    /* ── Gift card panel ── */
+    .gc-panel {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-default);
+    }
+    .gc-panel-inner {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px;
+    }
+    .gc-panel-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #bf5af2 0%, #7c3aed 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .gc-panel-body { flex: 1; min-width: 0; }
+    .gc-panel-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .gc-panel-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 17px;
+      margin-bottom: 10px;
+    }
+    .gc-stores {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .gc-store-chip {
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-default);
+      background: var(--fill-light);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex; align-items: center;
+    }
+    .gc-coming-soon {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      padding: 10px 18px 14px;
+      border-top: 1px solid var(--border-default);
+      line-height: 16px;
+    }
+
+    /* ── Scheduled payment methods ── */
+    .sched-header {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 12px 12px 0 0;
+      border-bottom: none;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .sched-header-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .sched-header-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+    .sched-header-desc  { font-size: 12px; color: var(--text-secondary); line-height: 17px; }
+
+    .methods-card {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-default);
+    }
+
+    /* ── Payment option row ── */
+    .popt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-default);
+      transition: background 0.1s;
+    }
+    .popt:last-child { border-bottom: none; }
+    .popt:hover { background: var(--state-hover); }
+    .popt.selected { background: var(--fill-cta-secondary); }
+
+    .popt-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-default);
+      flex-shrink: 0;
+      margin-top: 3px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .popt.selected .popt-radio { border-color: var(--fill-brand); background: var(--fill-brand); }
+    .popt-radio::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      display: none;
+    }
+    .popt.selected .popt-radio::after { display: block; }
+
+    .popt-logo {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; color: #fff;
+    }
+    .logo-check  { background: var(--fill-emphasis-med); color: var(--text-tertiary); font-size: 8px; text-align: center; line-height: 1.3; }
+    .logo-paypal { background: #003087; }
+    .logo-amex   { background: #016fd0; font-size: 8px; text-align: center; line-height: 1.3; }
+    .logo-venmo  { background: #3396cd; }
+    .logo-zelle  { background: #6d1ed4; }
+    .logo-bilt   { background: #000; }
+
+    .popt-body { flex: 1; min-width: 0; }
+    .popt-name { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 1px; }
+    .popt-desc { font-size: 11px; color: var(--text-secondary); line-height: 16px; }
+    .popt-handle {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .popt-handle.visible { display: flex; }
+    .popt-handle-change { color: var(--fill-brand); font-weight: 600; cursor: pointer; }
+    .popt-handle-change:hover { text-decoration: underline; }
+
+    /* ── Modal extras ── */
+    .modal-provider-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 20px 20px 0;
+    }
+    .modal-provider-logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; color: #fff; flex-shrink: 0;
+    }
+    .modal-provider-logo.venmo { background: #3396cd; }
+    .modal-provider-logo.zelle { background: #6d1ed4; }
+    .modal-provider-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .modal-provider-sub   { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+
+    .tab-row {
+      display: flex;
+      background: var(--fill-light);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      flex: 1; padding: 7px;
+      border: none; background: transparent; border-radius: 6px;
+      font-size: 13px; font-weight: 600; color: var(--text-tertiary);
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .tab-btn.active {
+      background: var(--fill-default);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-default);
+    }
+
+    .known-email-banner {
+      background: #f0f7ff; border: 1px solid #b3d4f5;
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .known-email-label { font-size: 12px; color: #1a5fa8; margin-bottom: 2px; }
+    .known-email-value { font-size: 14px; font-weight: 700; color: #1a5fa8; }
+    .known-email-change { font-size: 12px; font-weight: 700; color: var(--fill-brand); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .known-email-change:hover { text-decoration: underline; }
+
+    .modal-success { display: none; text-align: center; padding: 16px 0 8px; }
+    .modal-success .success-icon { font-size: 44px; margin-bottom: 10px; }
+    .modal-success h3 { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .modal-success p  { font-size: 13px; color: var(--text-tertiary); }
+
+    /* ── Address modal ── */
+    .addr-modal-icon {
+      width: 48px; height: 48px;
+      background: var(--fill-cta-secondary);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .addr-modal-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .addr-modal-sub   { font-size: 13px; color: var(--text-secondary); line-height: 19px; margin-bottom: 18px; }
+    .why-box {
+      background: var(--fill-cta-secondary);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .why-box-text { font-size: 12px; color: var(--text-brand); line-height: 17px; }
+    .why-box-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.04em; }
+    .form-input {
+      height: 40px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      background: var(--fill-default);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--fill-brand); box-shadow: 0 0 0 3px var(--fill-cta-secondary); }
+    .form-select {
+      height: 40px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
+      padding: 0 32px 0 12px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      background: var(--fill-default);
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+    .addr-divider { height: 1px; background: var(--border-default); margin: 14px 0 10px; }
+    .addr-section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+    .addr-legal {
+      font-size: 11px; color: var(--text-tertiary);
+      text-align: center; line-height: 16px; margin-top: 8px;
+    }
+    .addr-legal a { color: var(--fill-brand); }
+
+    @media (max-width: 680px) {
+      .page-wrap { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .mode-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-primary">
+    <button class="header-hamburger-btn" aria-label="Open menu" onclick="openMobileMenu()">
+      <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><rect x="2" y="4.5" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="9" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="13.5" width="16" height="2" rx="1" fill="currentColor"/></svg>
+    </button>
+    <a class="header-logo" href="#"><img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten"></a>
+    <button class="header-nav-btn">Categories <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="header-search">
+      <input class="header-search-input" type="text" placeholder="Search stores, products, and coupons">
+      <button class="header-search-btn"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="white" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="header-actions">
+      <button class="header-search-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 16 16" fill="none" width="18" height="18"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <button class="header-action-btn">Rewards</button>
+      <button class="header-action-btn">Matt $90.20 ▾</button>
+    </div>
+  </div>
+  <nav class="header-subnav">
+    <a class="header-subnav-item" href="#">Extra Cash Back</a>
+    <a class="header-subnav-item" href="#">Hot Deals</a>
+    <a class="header-subnav-item" href="#">In-Store</a>
+    <a class="header-subnav-item" href="#">Travel</a>
+    <a class="header-subnav-item" href="#">Clothing</a>
+    <a class="header-subnav-item" href="#">Beauty</a>
+    <a class="header-subnav-item" href="#">Food</a>
+  </nav>
+</header>
+
+<div class="header-mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="header-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="header-mobile-panel">
+    <div class="header-mobile-panel-top">
+      <div class="header-mobile-panel-logo"><img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten"></div>
+      <button class="header-mobile-close" onclick="closeMobileMenu()" aria-label="Close menu">
+        <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <nav class="header-mobile-nav">
+      <a class="header-mobile-nav-item" href="#" onclick="closeMobileMenu()">Extra Cash Back</a>
+      <a class="header-mobile-nav-item" href="#" onclick="closeMobileMenu()">Hot Deals</a>
+      <div class="header-mobile-nav-divider"></div>
+      <a class="header-mobile-nav-item" href="#" onclick="closeMobileMenu()">Account Settings</a>
+    </nav>
+    <div class="header-mobile-panel-actions">
+      <button class="btn btn-primary btn-md" style="width:100%;">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-greeting">
+      <div class="sidebar-name">Hi Matt</div>
+      <div class="sidebar-cashback">$750.72 Lifetime Cash Back</div>
+      <div class="sidebar-since">Member Since 9/24/2024</div>
+    </div>
+    <button class="sidebar-refer">Refer &amp; Earn $50+</button>
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">👤</span> Account</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">💰</span> Cash Back Activity</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">🛒</span> Shopping Trips</a>
+      <a class="sidebar-nav-item active" href="#"><span class="sidebar-nav-icon">⚙️</span> Account Settings</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">💳</span> Manage Rakuten Card</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">♡</span> Favorite Stores</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">🔗</span> Linked Cards</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">✉️</span> Email Subscriptions</a>
+      <a class="sidebar-nav-item" href="#"><span class="sidebar-nav-icon">🛡</span> Privacy Preferences</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <h1 class="page-title">Account Settings</h1>
+
+    <!-- Profile -->
+    <div class="section-eyebrow">Profile</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="settings-row-label">Email</div>
+        <div class="settings-row-value">ma*****@rakuten.com</div>
+        <a class="btn-link" href="#">Edit</a>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-label">Password</div>
+        <div class="settings-row-value">•••••••••</div>
+        <a class="btn-link" href="#">Edit</a>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-label">Address</div>
+        <div class="settings-row-value">Matt Law, 123 Atlantic Ave Apt 2B, Brooklyn, NY 11201</div>
+        <a class="btn-link" href="#">Edit</a>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-label">Mobile number</div>
+        <div class="settings-row-value">+1 718-555-0142</div>
+        <a class="btn-link" href="#">Edit</a>
+      </div>
+    </div>
+
+    <!-- How You're Getting Paid -->
+    <div class="section-eyebrow">How You're Getting Paid</div>
+
+    <!-- Mode selector -->
+    <div class="mode-cards">
+      <div class="mode-card active" id="mode-instant" onclick="setMode('instant')">
+        <div class="mode-card-check"></div>
+        <div class="mode-card-icon">⚡</div>
+        <div class="mode-card-title">Redeem instantly</div>
+        <div class="mode-card-desc">Cash out whenever you want — no waiting for a payment date.</div>
+        <div class="mode-card-badge">Recommended</div>
+      </div>
+      <div class="mode-card" id="mode-scheduled" onclick="setMode('scheduled')">
+        <div class="mode-card-check"></div>
+        <div class="mode-card-icon">📅</div>
+        <div class="mode-card-title">Scheduled payments</div>
+        <div class="mode-card-desc">Get paid automatically every quarter to the account of your choice.</div>
+      </div>
+    </div>
+
+    <!-- Instant panel -->
+    <div class="panel visible" id="panel-instant">
+      <div class="gc-panel">
+        <div class="gc-panel-inner">
+          <div class="gc-panel-icon">🎁</div>
+          <div class="gc-panel-body">
+            <div class="gc-panel-title">Gift Cards</div>
+            <div class="gc-panel-desc">Redeem your Cash Back for gift cards from top brands. Some brands even give you a little extra.</div>
+            <div class="gc-stores">
+              <span class="gc-store-chip">Apple</span>
+              <span class="gc-store-chip">Target</span>
+              <span class="gc-store-chip">Starbucks</span>
+              <span class="gc-store-chip">Amazon</span>
+              <span class="gc-store-chip">+ more</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-address')">Browse Gift Cards</button>
+          </div>
+        </div>
+        <div class="gc-coming-soon">More instant payout options coming soon — including direct deposit and Venmo.</div>
+      </div>
+    </div>
+
+    <!-- Scheduled panel -->
+    <div class="panel" id="panel-scheduled">
+      <div class="sched-header">
+        <div class="sched-header-icon">📅</div>
+        <div>
+          <div class="sched-header-title">Quarterly payments</div>
+          <div class="sched-header-desc">Your confirmed Cash Back is paid automatically every quarter. Next payment: <strong>September 15, 2026.</strong></div>
+        </div>
+      </div>
+      <div class="methods-card">
+
+        <div class="popt selected" id="opt-paypal" onclick="selectMethod('paypal')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-paypal">P</div>
+          <div class="popt-body">
+            <div class="popt-name">PayPal</div>
+            <div class="popt-desc">Transfer directly to your PayPal balance.</div>
+          </div>
+        </div>
+
+        <div class="popt" id="opt-venmo" onclick="openProviderModal('venmo')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-venmo">V</div>
+          <div class="popt-body">
+            <div class="popt-name">Venmo</div>
+            <div class="popt-desc">Transfer to your Venmo account.</div>
+            <div class="popt-handle" id="venmo-handle-row">
+              <span id="venmo-handle-text"></span>
+              <span class="popt-handle-change" onclick="event.stopPropagation(); openProviderModal('venmo', true)">Change</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="popt" id="opt-zelle" onclick="openProviderModal('zelle')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-zelle">Z</div>
+          <div class="popt-body">
+            <div class="popt-name">Zelle</div>
+            <div class="popt-desc">Send directly to your bank via Zelle.</div>
+            <div class="popt-handle" id="zelle-handle-row">
+              <span id="zelle-handle-text"></span>
+              <span class="popt-handle-change" onclick="event.stopPropagation(); openProviderModal('zelle', true)">Change</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="popt" id="opt-check" onclick="selectMethod('check')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-check">BIG<br>CHECK</div>
+          <div class="popt-body">
+            <div class="popt-name">Big Fat Check</div>
+            <div class="popt-desc">A physical check mailed to your address on file.</div>
+          </div>
+        </div>
+
+        <div class="popt" id="opt-amex" onclick="selectMethod('amex')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-amex">MR<br>PTS</div>
+          <div class="popt-body">
+            <div class="popt-name">Membership Rewards® points</div>
+            <div class="popt-desc">Earn Amex points instead of Cash Back.</div>
+          </div>
+        </div>
+
+        <div class="popt" id="opt-bilt" onclick="selectMethod('bilt')">
+          <div class="popt-radio"></div>
+          <div class="popt-logo logo-bilt">B</div>
+          <div class="popt-body">
+            <div class="popt-name">Bilt</div>
+            <div class="popt-desc">Convert your Cash Back to Bilt Points.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Address Modal ── -->
+<div class="modal-overlay" id="modal-address" onclick="closeOnOverlay(event,'modal-address')">
+  <div class="modal-card modal-narrow" style="max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modal-address')">
+      <svg viewBox="0 0 14 14" fill="none" width="12" height="12"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal-body">
+      <div class="addr-modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--fill-brand)"/></svg>
+      </div>
+      <div class="addr-modal-title">One quick step before you shop</div>
+      <div class="addr-modal-sub">We need a mailing address on file to send your gift card. We'll send a verification email to <strong>ma*****@rakuten.com</strong>.</div>
+      <div class="why-box">
+        <svg viewBox="0 0 20 20" fill="none" width="16" height="16" style="flex-shrink:0;margin-top:1px"><circle cx="10" cy="10" r="8" stroke="var(--fill-brand)" stroke-width="1.5"/><path d="M10 9v5M10 7v.5" stroke="var(--fill-brand)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div class="why-box-text">
+          <strong>Required to redeem gift cards</strong>
+          Add it once and you're set for every redemption going forward.
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" value="Matt">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" value="Law">
+        </div>
+      </div>
+      <div class="addr-divider"></div>
+      <div class="addr-section-label">Mailing Address</div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Street Address</label>
+          <input class="form-input" type="text" placeholder="Street address">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Address 2 <span style="font-weight:400;color:var(--text-tertiary)">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="Apt, suite, unit, etc.">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input class="form-input" type="text" value="">
+        </div>
+        <div class="form-group">
+          <label class="form-label">State</label>
+          <select class="form-select"><option>New York</option><option>California</option><option>Texas</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">ZIP Code</label>
+          <input class="form-input" type="text" placeholder="ZIP code">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <select class="form-select"><option>United States</option><option>Canada</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-lg" style="width:100%;" onclick="window.location='../gift-card-address/index.html'">Save &amp; Browse Gift Cards</button>
+      <div class="addr-legal"><a href="#">APO or FPO information</a> &nbsp;·&nbsp; <a href="#">Privacy Policy</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Venmo Modal ── -->
+<div class="modal-overlay" id="modal-venmo" onclick="closeOnOverlay(event,'modal-venmo')">
+  <div class="modal-card modal-narrow">
+    <div class="modal-provider-header">
+      <div class="modal-provider-logo venmo">V</div>
+      <div>
+        <div class="modal-provider-title">Connect Venmo</div>
+        <div class="modal-provider-sub">Choose how we'll find your account</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeModal('modal-venmo')">
+        <svg viewBox="0 0 14 14" fill="none" width="14" height="14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-row">
+        <button class="tab-btn active" id="venmo-tab-email" onclick="switchTab('venmo','email')">Email</button>
+        <button class="tab-btn" id="venmo-tab-phone" onclick="switchTab('venmo','phone')">Phone</button>
+      </div>
+      <div id="venmo-panel-email">
+        <div class="known-email-banner" id="venmo-known-banner">
+          <div>
+            <div class="known-email-label">We have your email on file</div>
+            <div class="known-email-value">ma*****@rakuten.com</div>
+          </div>
+          <span class="known-email-change" onclick="showEdit('venmo')">Use different email</span>
+        </div>
+        <div id="venmo-email-edit" style="display:none">
+          <div class="field-wrap" style="margin-bottom:0">
+            <input class="field" id="venmo-email-input" type="email" placeholder="your@email.com" />
+          </div>
+        </div>
+      </div>
+      <div id="venmo-panel-phone" style="display:none">
+        <div class="field-wrap" style="margin-bottom:0">
+          <input class="field" id="venmo-phone-input" type="tel" placeholder="+1 (555) 000-0000" />
+        </div>
+      </div>
+      <div class="modal-success" id="venmo-success">
+        <div class="success-icon">✅</div>
+        <h3>Venmo Connected!</h3>
+        <p>Your Cash Back will be transferred to your Venmo account.</p>
+      </div>
+    </div>
+    <div class="modal-footer" id="venmo-footer">
+      <button class="btn btn-primary btn-lg" style="width:100%;" onclick="saveHandle('venmo')">Confirm &amp; Select</button>
+      <button class="btn btn-tertiary btn-md" onclick="closeModal('modal-venmo')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Zelle Modal ── -->
+<div class="modal-overlay" id="modal-zelle" onclick="closeOnOverlay(event,'modal-zelle')">
+  <div class="modal-card modal-narrow">
+    <div class="modal-provider-header">
+      <div class="modal-provider-logo zelle">Z</div>
+      <div>
+        <div class="modal-provider-title">Connect Zelle</div>
+        <div class="modal-provider-sub">Choose how we'll find your account</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeModal('modal-zelle')">
+        <svg viewBox="0 0 14 14" fill="none" width="14" height="14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-row">
+        <button class="tab-btn active" id="zelle-tab-email" onclick="switchTab('zelle','email')">Email</button>
+        <button class="tab-btn" id="zelle-tab-phone" onclick="switchTab('zelle','phone')">Phone</button>
+      </div>
+      <div id="zelle-panel-email">
+        <div class="known-email-banner" id="zelle-known-banner">
+          <div>
+            <div class="known-email-label">We have your email on file</div>
+            <div class="known-email-value">ma*****@rakuten.com</div>
+          </div>
+          <span class="known-email-change" onclick="showEdit('zelle')">Use different email</span>
+        </div>
+        <div id="zelle-email-edit" style="display:none">
+          <div class="field-wrap" style="margin-bottom:0">
+            <input class="field" id="zelle-email-input" type="email" placeholder="your@email.com" />
+          </div>
+        </div>
+      </div>
+      <div id="zelle-panel-phone" style="display:none">
+        <div class="field-wrap" style="margin-bottom:0">
+          <input class="field" id="zelle-phone-input" type="tel" placeholder="+1 (555) 000-0000" />
+        </div>
+      </div>
+      <div class="modal-success" id="zelle-success">
+        <div class="success-icon">✅</div>
+        <h3>Zelle Connected!</h3>
+        <p>Your Cash Back will be sent directly to your bank via Zelle.</p>
+      </div>
+    </div>
+    <div class="modal-footer" id="zelle-footer">
+      <button class="btn btn-primary btn-lg" style="width:100%;" onclick="saveHandle('zelle')">Confirm &amp; Select</button>
+      <button class="btn btn-tertiary btn-md" onclick="closeModal('modal-zelle')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <p class="footer-col-heading">Download our app</p>
+      <ul class="footer-links"><li><a href="#">Rakuten Mobile Apps</a></li></ul>
+    </div>
+    <div>
+      <p class="footer-col-heading">About</p>
+      <ul class="footer-links">
+        <li><a href="#">Getting Started</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-heading">Stores &amp; Brands</p>
+      <ul class="footer-links">
+        <li><a href="#">Best Buy</a></li>
+        <li><a href="#">Macy's</a></li>
+        <li><a href="#">Target</a></li>
+        <li><a href="#">Nike</a></li>
+        <li><a href="#">See All Stores</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-heading">Popular categories</p>
+      <ul class="footer-links">
+        <li><a href="#">Clothing</a></li>
+        <li><a href="#">Electronics</a></li>
+        <li><a href="#">Shoes</a></li>
+        <li><a href="#">Home &amp; Garden</a></li>
+      </ul>
+    </div>
+  </div>
+  <hr class="footer-divider">
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <a href="#">Advertising Disclosure</a>
+      <span>© 2026 Ebates Performance Marketing Inc., d/b/a Rakuten Rewards</span>
+    </div>
+  </div>
+  <div class="footer-family">
+    <a href="#">Rakuten Viki</a>
+    <a href="#">Rakuten Viber</a>
+    <a href="#">Rakuten Kobo</a>
+    <a href="#">Rakuten Travel</a>
+    <a href="#">About Rakuten</a>
+  </div>
+</footer>
+
+<script>
+  const KNOWN_EMAIL = 'ma*****@rakuten.com';
+  let activeMode = 'instant';
+  let selectedMethod = 'paypal';
+  const state = {
+    venmo: { handle: null, activeTab: 'email', editingEmail: false },
+    zelle: { handle: null, activeTab: 'email', editingEmail: false },
+  };
+
+  function setMode(mode) {
+    activeMode = mode;
+    document.getElementById('mode-instant').classList.toggle('active', mode === 'instant');
+    document.getElementById('mode-scheduled').classList.toggle('active', mode === 'scheduled');
+    document.getElementById('panel-instant').classList.toggle('visible', mode === 'instant');
+    document.getElementById('panel-scheduled').classList.toggle('visible', mode === 'scheduled');
+  }
+
+  function selectMethod(id) {
+    document.getElementById('opt-' + selectedMethod)?.classList.remove('selected');
+    selectedMethod = id;
+    document.getElementById('opt-' + id).classList.add('selected');
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape')
+      document.querySelectorAll('.modal-overlay.open').forEach(el => { el.classList.remove('open'); document.body.style.overflow = ''; });
+  });
+
+  function openProviderModal(provider, forceEdit) {
+    const s = state[provider];
+    s.editingEmail = !!forceEdit;
+    document.getElementById(provider + '-success').style.display = 'none';
+    document.getElementById(provider + '-footer').style.display = 'flex';
+    switchTab(provider, s.activeTab || 'email');
+    updateEmailPanel(provider);
+    openModal('modal-' + provider);
+  }
+
+  function switchTab(provider, tab) {
+    state[provider].activeTab = tab;
+    ['email','phone'].forEach(t => {
+      document.getElementById(provider + '-tab-' + t).classList.toggle('active', t === tab);
+      document.getElementById(provider + '-panel-' + t).style.display = t === tab ? 'block' : 'none';
+    });
+  }
+
+  function updateEmailPanel(provider) {
+    const s = state[provider];
+    const banner = document.getElementById(provider + '-known-banner');
+    const edit   = document.getElementById(provider + '-email-edit');
+    const inp    = document.getElementById(provider + '-email-input');
+    if (s.editingEmail || (s.handle && s.handle.includes('@'))) {
+      banner.style.display = 'none'; edit.style.display = 'block';
+      inp.value = (s.handle && s.handle.includes('@')) ? s.handle : '';
+    } else {
+      banner.style.display = 'flex'; edit.style.display = 'none';
+    }
+  }
+
+  function showEdit(provider) { state[provider].editingEmail = true; updateEmailPanel(provider); }
+
+  function saveHandle(provider) {
+    const s = state[provider];
+    let handle = '';
+    if (s.activeTab === 'email') {
+      if (!s.editingEmail) {
+        handle = KNOWN_EMAIL;
+      } else {
+        const inp = document.getElementById(provider + '-email-input');
+        const val = inp.value.trim();
+        if (!val || !val.includes('@')) { inp.classList.add('field-error'); inp.focus(); return; }
+        inp.classList.remove('field-error'); handle = val;
+      }
+    } else {
+      const inp = document.getElementById(provider + '-phone-input');
+      const val = inp.value.trim();
+      if (!val || val.replace(/\D/g,'').length < 7) { inp.classList.add('field-error'); inp.focus(); return; }
+      inp.classList.remove('field-error'); handle = val;
+    }
+    s.handle = handle;
+    document.getElementById(provider + '-handle-text').textContent = handle;
+    document.getElementById(provider + '-handle-row').classList.add('visible');
+    document.getElementById(provider + '-footer').style.display = 'none';
+    document.getElementById(provider + '-success').style.display = 'block';
+    setTimeout(() => { selectMethod(provider); closeModal('modal-' + provider); }, 1400);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 0);
+  });
+
+  function openMobileMenu() {
+    document.getElementById('mobile-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobile-drawer').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+
+</body>
+</html>
