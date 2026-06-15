@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Your Order — Rakuten</title>
+  <link rel="stylesheet" href="./radiant-foundations.css">
+  <link rel="stylesheet" href="./radiant-components.css">
+  <style>
+    body { background: var(--fill-light); min-height: 100vh; font-family: 'Rakuten Sans UI', sans-serif; }
+
+    .page-wrap {
+      max-width: 880px;
+      margin: 48px auto;
+      padding: 0 16px 64px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 32px;
+      grid-column: 1 / -1;
+    }
+    .breadcrumb a { color: var(--fill-brand); text-decoration: none; font-weight: 600; }
+
+    /* Progress steps */
+    .steps {
+      display: flex;
+      align-items: center;
+      margin-bottom: 36px;
+      grid-column: 1 / -1;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .step-item + .step-item::before {
+      content: '';
+      position: absolute;
+      left: -50%; top: 14px;
+      width: 100%; height: 2px;
+      background: var(--fill-brand);
+      z-index: 0;
+    }
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--fill-brand);
+      background: var(--fill-brand);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      color: #fff;
+      z-index: 1; position: relative;
+    }
+    .step-item.active .step-dot {
+      background: var(--fill-cta-secondary);
+      color: var(--fill-brand);
+    }
+    .step-label { font-size: 10px; font-weight: 600; color: var(--text-primary); margin-top: 5px; text-align: center; }
+    .step-item.active .step-label { color: var(--fill-brand); }
+
+    /* Left column: gift card image */
+    .gc-image-wrap {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      aspect-ratio: 3/2;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-default);
+    }
+
+    /* Right column: order summary card */
+    .order-card {
+      background: var(--fill-default);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-default);
+    }
+    .order-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .order-gc-name { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .price-row .label { color: var(--text-secondary); }
+    .price-row .value-strike { text-decoration: line-through; color: var(--text-tertiary); font-size: 13px; }
+    .price-row.boost .value { color: var(--state-success); font-weight: 700; }
+
+    .boost-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #e8f5e9; color: #2e7d32;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 8px; border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+
+    .divider { height: 1px; background: var(--border-default); margin: 14px 0; }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    /* Address summary */
+    .address-summary {
+      background: var(--fill-light);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .address-summary-label { font-size: 11px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+    .address-summary-value { font-size: 12px; color: var(--text-secondary); line-height: 17px; }
+    .address-summary-edit { font-size: 12px; font-weight: 700; color: var(--fill-brand); cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .address-summary-edit:hover { text-decoration: underline; }
+
+    .delivery-note {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 17px;
+      margin-bottom: 20px;
+    }
+    .delivery-note a { color: var(--fill-brand); }
+
+    .terms {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      line-height: 16px;
+      margin-bottom: 16px;
+    }
+    .terms a { color: var(--fill-brand); }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-primary">
+    <button class="header-hamburger-btn" aria-label="Open menu">
+      <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><rect x="2" y="4.5" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="9" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="13.5" width="16" height="2" rx="1" fill="currentColor"/></svg>
+    </button>
+    <a class="header-logo" href="#"><img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten"></a>
+    <button class="header-nav-btn">Categories <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="header-search">
+      <input class="header-search-input" type="text" placeholder="Try searching for Expedia">
+      <button class="header-search-btn"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="white" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="header-actions">
+      <button class="header-action-btn">Rewards</button>
+      <button class="header-action-btn">Matt $41.85 ▾</button>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="index.html">Gift Cards</a>
+    <span>›</span>
+    <a href="address.html">Confirm Address</a>
+    <span>›</span>
+    <span style="color:var(--text-primary);font-weight:600;">Review Order</span>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-dot">✓</div>
+      <div class="step-label">Select Gift Card</div>
+    </div>
+    <div class="step-item">
+      <div class="step-dot">✓</div>
+      <div class="step-label">Confirm Address</div>
+    </div>
+    <div class="step-item active">
+      <div class="step-dot">3</div>
+      <div class="step-label">Review &amp; Redeem</div>
+    </div>
+  </div>
+
+  <!-- Gift card image -->
+  <div class="gc-image-wrap">
+    <svg viewBox="0 0 160 160" width="120" height="120">
+      <path d="M114 84.8c0-14 11.6-20.8 12-21.2-6.4-9.6-16.8-10.8-20.4-10.8-8.8-.8-16.8 5.2-21.2 5.2-4.4 0-11.2-4.8-18.4-4.8-9.6 0-18.4 5.6-23.2 14-10 17.2-2.4 42.8 6.8 56.8 4.8 6.8 10 14.4 17.2 14 6.8-.4 9.6-4.4 18-4.4 8.4 0 10.8 4.4 18 4.4 7.6 0 12.4-6.8 16.8-13.6 5.2-8 7.6-15.6 7.6-16-.4 0-17.2-6.8-17.2-23.6zM100 46c3.6-4.4 6.4-10.8 5.6-17.2-5.6.4-12 3.6-16 8.4-3.6 4-6.8 10.4-6 16.8 6.4.4 12.8-3.2 16.4-8z" fill="#1d1d1f"/>
+    </svg>
+  </div>
+
+  <!-- Order summary -->
+  <div class="order-card">
+    <div class="order-title">Review your order</div>
+    <div class="order-gc-name">Apple.com Gift Card</div>
+
+    <div class="boost-tag">⚡ Includes 5% Boost</div>
+
+    <div class="price-row">
+      <span class="label">Cash Back Balance</span>
+      <span>$17.61</span>
+    </div>
+    <div class="price-row boost">
+      <span class="label">5% Boost</span>
+      <span class="value">+$0.88</span>
+    </div>
+    <div class="divider"></div>
+    <div class="total-row">
+      <span>Gift Card Total</span>
+      <span>$18.49</span>
+    </div>
+
+    <div class="delivery-note">
+      We'll send your gift card to <strong>ma*****@rakuten.com</strong>. You can change your email address in <a href="#">Account Settings</a>.
+    </div>
+
+    <div class="terms">
+      By redeeming, you agree to the <a href="#">Rakuten and Apple.com Gift Card Terms</a>. Redemptions are final.
+    </div>
+
+    <button class="btn btn-primary btn-lg" style="width:100%;">Redeem Now</button>
+
+    <div style="text-align:center;margin-top:12px;">
+      <a href="address.html" style="font-size:12px;color:var(--fill-brand);text-decoration:none;font-weight:600;">← Back</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <span>© 2026 Ebates Performance Marketing Inc., d/b/a Rakuten Rewards</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 0);
+  });
+</script>
+</body>
+</html>

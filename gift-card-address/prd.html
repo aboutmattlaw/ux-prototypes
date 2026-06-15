@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Card Address Collection — PRD</title>
+  <link rel="stylesheet" href="./radiant-foundations.css">
+  <link rel="stylesheet" href="./radiant-components.css">
+  <style>
+    body {
+      background: var(--fill-light);
+      min-height: 100vh;
+      font-family: 'Rakuten Sans UI', sans-serif;
+      padding: 48px 24px 80px;
+    }
+
+    .doc {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .doc-header {
+      margin-bottom: 40px;
+    }
+    .doc-header img { height: 20px; display: block; margin-bottom: 20px; }
+    .doc-eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-brand);
+      margin-bottom: 8px;
+    }
+    .doc-title {
+      font-size: 28px; font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .doc-meta {
+      font-size: 13px; color: var(--text-tertiary);
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .doc-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* Divider */
+    .divider { height: 1px; background: var(--border-default); margin: 32px 0; }
+
+    /* Section */
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 12px;
+    }
+    .section-body {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 22px;
+    }
+    .section-body p { margin-bottom: 10px; }
+    .section-body strong { color: var(--text-primary); font-weight: 700; }
+
+    /* Callout box */
+    .callout {
+      background: var(--fill-cta-secondary);
+      border-left: 3px solid var(--fill-brand);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text-brand);
+      line-height: 20px;
+      margin-bottom: 16px;
+    }
+    .callout strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* Flow steps */
+    .flow-steps { display: flex; flex-direction: column; gap: 0; }
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--fill-brand);
+      color: #fff;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .flow-step-text { font-size: 14px; color: var(--text-secondary); line-height: 20px; }
+    .flow-step-text strong { color: var(--text-primary); }
+
+    /* Two-col list */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .list-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--text-secondary); line-height: 18px;
+    }
+    .list-item::before {
+      content: '·';
+      color: var(--fill-brand);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Metrics table */
+    .metrics-table { width: 100%; border-collapse: collapse; }
+    .metrics-table th {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-tertiary);
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--fill-light);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .metrics-table td {
+      font-size: 13px; color: var(--text-secondary);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-default);
+      vertical-align: top;
+      line-height: 18px;
+    }
+    .metrics-table tr:last-child td { border-bottom: none; }
+    .metrics-table td:first-child { color: var(--text-primary); font-weight: 600; }
+
+    /* Out of scope */
+    .oos-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--text-tertiary);
+      line-height: 18px; margin-bottom: 8px;
+    }
+    .oos-item::before {
+      content: '–';
+      flex-shrink: 0;
+    }
+
+    /* Prototype link */
+    .prototype-bar {
+      background: var(--fill-emphasis-high);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .prototype-bar-text { font-size: 13px; color: var(--text-inverse-secondary); }
+    .prototype-bar-text strong { color: var(--text-inverse-primary); display: block; font-size: 14px; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten">
+    <div class="doc-eyebrow">Product Requirements</div>
+    <div class="doc-title">Gift Card Redemption —<br>Mailing Address Collection</div>
+    <div class="doc-meta">
+      <span>June 2026</span>
+      <span>·</span>
+      <span>Gift Cards / Payout</span>
+      <span>·</span>
+      <span>Draft</span>
+    </div>
+  </div>
+
+  <!-- Prototype link -->
+  <div class="prototype-bar">
+    <div class="prototype-bar-text">
+      <strong>Interactive Prototype</strong>
+      Gift card index → address modal → order review
+    </div>
+    <a href="./index.html" class="btn btn-inverse btn-sm">View Prototype →</a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Overview -->
+  <div class="section">
+    <div class="section-title">Overview</div>
+    <div class="section-body">
+      <p>When a member redeems Cash Back as a gift card, we currently require a mailing address on file. Members without one hit a dead end in the redemption flow. This feature introduces an inline address collection step — surfaced as a modal between the gift card index and the order review page — so members can complete redemption without leaving the flow or navigating to Account Settings.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <div class="section">
+    <div class="section-title">Problem</div>
+    <div class="section-body">
+      <p>Members selecting a gift card are blocked from redeeming if no mailing address exists on their account. The current resolution path sends them to Account Settings, breaking the redemption flow and creating drop-off. First-time redeemers are disproportionately affected.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Goal -->
+  <div class="section">
+    <div class="section-title">Goal</div>
+    <div class="callout">
+      <strong>Primary goal</strong>
+      Eliminate address-related drop-off in the gift card redemption funnel without requiring members to leave the flow.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- User story -->
+  <div class="section">
+    <div class="section-title">User Story</div>
+    <div class="section-body">
+      <p><em>As a member redeeming Cash Back as a gift card for the first time, I want to be prompted to enter my mailing address in context so I can complete my redemption without being redirected to another page.</em></p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Flow -->
+  <div class="section">
+    <div class="section-title">Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-step-text">Member lands on Gift Card index and selects a card</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-step-text"><strong>If no mailing address is on file</strong> — address modal appears over the dimmed index page</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-step-text">Member enters or confirms name and mailing address, taps <strong>Save &amp; Continue</strong></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-step-text">Member proceeds to Order Review and completes redemption</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-step-text">Address is saved to account — modal is never shown again for this member</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-tertiary);">If a mailing address already exists on the account, step 2 is skipped entirely.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Modal design -->
+  <div class="section">
+    <div class="section-title">Modal Design</div>
+    <div class="section-body">
+      <p>The modal appears as an overlay on the gift card index. The background page is dimmed but remains visible to preserve context. It mirrors the existing address UI in Account Settings.</p>
+    </div>
+    <div class="two-col">
+      <div class="list-item">Pre-fills first/last name from account</div>
+      <div class="list-item">Explains context without alarming the member</div>
+      <div class="list-item">Fields: street, address 2, city, state, ZIP, country</div>
+      <div class="list-item">X closes modal and returns to gift card index</div>
+      <div class="list-item">CTA: <strong>Save &amp; Continue</strong> → Order Review</div>
+      <div class="list-item">Address persists to account on save</div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="callout">
+        <strong>Framing copy</strong>
+        "A mailing address is needed to send your gift card. Add it once and you're set for every redemption going forward."
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Out of scope -->
+  <div class="section">
+    <div class="section-title">Out of Scope</div>
+    <div class="oos-item">Address editing post-redemption (existing Account Settings flow handles this)</div>
+    <div class="oos-item">Showing the saved address on the Order Review page</div>
+    <div class="oos-item">International address formats beyond US / Canada</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Success metrics -->
+  <div class="section">
+    <div class="section-title">Success Metrics</div>
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>What we're measuring</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Redemption drop-off rate</td>
+          <td>Reduction in abandonment for members with no address on file</td>
+        </tr>
+        <tr>
+          <td>Modal completion rate</td>
+          <td>Save &amp; Continue vs. dismiss (X) — indicates friction level</td>
+        </tr>
+        <tr>
+          <td>Overall funnel abandonment</td>
+          <td>No measurable increase vs. baseline for all redeemers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Dependencies -->
+  <div class="section">
+    <div class="section-title">Dependencies</div>
+    <div class="two-col">
+      <div class="list-item">Address save API (same endpoint as Account Settings)</div>
+      <div class="list-item">Account address lookup to gate modal display</div>
+      <div class="list-item">Verification email trigger on address save</div>
+      <div class="list-item">Session state to pass address into Order Review</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

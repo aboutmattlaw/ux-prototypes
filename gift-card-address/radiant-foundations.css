@@ -1,0 +1,811 @@
+/*
+ * Radiant Foundations — Fonts
+ */
+
+@font-face {
+  font-family: 'Rakuten Sans UI';
+  src: url('./fonts/RakutenSansUI_W_Rg.woff2') format('woff2'),
+       url('./fonts/RakutenSansUI_W_Rg.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rakuten Sans UI';
+  src: url('./fonts/RakutenSansUI_W_SBd.woff2') format('woff2'),
+       url('./fonts/RakutenSansUI_W_SBd.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rakuten Sans UI';
+  src: url('./fonts/RakutenSansUI_W_Bd.woff2') format('woff2'),
+       url('./fonts/RakutenSansUI_W_Bd.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rakuten Sans UI';
+  src: url('./fonts/RakutenSansUI_W_Blk.woff2') format('woff2'),
+       url('./fonts/RakutenSansUI_W_Blk.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Radiant Foundations — Design Tokens
+ * Source: Figma "📐 Radiant Foundations"
+ * https://www.figma.com/design/sAIUyNU81V0v0pSWelNkrG
+ *
+ * Sections:
+ *  1. Color Palette (base)
+ *  2. Text Colors
+ *  3. Fill Colors
+ *  4. Border Colors
+ *  5. State Colors
+ *  6. Brand Colors
+ *  7. Drop Shadows
+ *  8. Typography Classes
+ */
+
+/* ==========================================================================
+   1. Color Palette
+   ========================================================================== */
+
+:root {
+  /* --- Purple --- */
+  --palette-purple-400: #480081;
+  --palette-purple-300: #7119b8;
+  --palette-purple-200: #8529cd;
+  --palette-purple-100: #9b50d6;
+  --palette-purple-50:  #bc9fea;
+  --palette-purple-25:  #cfc0ff;
+  --palette-purple-15:  #e4e0fc;
+  --palette-purple-05:  #f4f3fe;
+
+  /* --- Grey --- */
+  --palette-almost-black: #22202d;
+  --palette-grey-800:     #383446;
+  --palette-grey-700:     #464356;
+  --palette-grey-600:     #605c70;
+  --palette-grey-500:     #7a7788;
+  --palette-grey-400:     #938fa3;
+  --palette-grey-300:     #aca9bc;
+  --palette-grey-250:     #949494;
+  --palette-grey-200:     #c4c0d3;
+  --palette-grey-100:     #d9d6e6;
+  --palette-grey-50:      #e7e4f1;
+  --palette-grey-25:      #f2f1f9;
+  --palette-grey-15:      #f9f8fc;
+  --palette-grey-05:      #fafafa;
+  --palette-white:        #ffffff;
+
+  /* --- Red --- */
+  --palette-red-300: #b90037;
+  --palette-red-15:  #ffe2eb;
+  --palette-red-05:  #fff8f9;
+
+  /* --- Blue --- */
+  --palette-blue-400: #242463;
+  --palette-blue-300: #3e3e9d;
+  --palette-blue-100: #61bce3;
+  --palette-blue-05:  #f2f9fd;
+
+  /* --- Green --- */
+  --palette-green-400: #134028;
+  --palette-green-300: #33823f;
+  --palette-green-15:  #d6f6b5;
+  --palette-green-05:  #f8fff2;
+
+  /* --- Orange --- */
+  --palette-orange-400: #ae5308;
+  --palette-orange-300: #ee6b00;
+  --palette-orange-15:  #ffefb5;
+  --palette-orange-05:  #fff9e8;
+
+  /* --- Fuchsia --- */
+  --palette-fuchsia: #e80c5b;
+
+  /* --- Brown --- */
+  --palette-brown-400: #462c0f;
+  --palette-brown-300: #724007;
+  --palette-brown-200: #ad681f;
+  --palette-brown-100: #d1a06f;
+  --palette-brown-15:  #ecdac4;
+  --palette-brown-05:  #f9f2ea;
+
+  /* --- Rak Plus Gold --- */
+  --palette-gold-400: #55380c;
+  --palette-gold-300: #815717;
+  --palette-gold-200: #936816;
+  --palette-gold-100: #b1884c;
+  --palette-gold-50:  #d6c1a1;
+  --palette-gold-25:  #ece3d3;
+  --palette-gold-15:  #f8f5ef;
+  --palette-gold-05:  #fbf9f4;
+
+  /* --- Alpha (dark on light) --- */
+  --palette-alpha-40: #22202d66;
+  --palette-alpha-08: #22202d14;
+  --palette-alpha-04: #22202d0a;
+
+  /* --- Alpha Inverse (light on dark) --- */
+  --palette-alpha-inverse-40: #ffffff66;
+  --palette-alpha-inverse-20: #ffffff33;
+  --palette-alpha-inverse-16: #ffffff29;
+  --palette-alpha-inverse-12: #ffffff1f;
+}
+
+/* ==========================================================================
+   2. Text Colors
+   ========================================================================== */
+
+:root {
+  --text-primary:             #22202d;
+  --text-secondary:           #464356;
+  --text-tertiary:            #605c70;
+  --text-inverse:             #ffffff;
+  --text-inverse-primary:     #ffffff;
+  --text-inverse-secondary:   #e7e4f1;
+  --text-inverse-tertiary:    #d9d6e6;
+  --text-action:              #22202d;
+  --text-inverse-action:      #ffffff;
+  --text-brand:               #8529cd;
+  --text-inverse-brand:       #ffffff;
+  --text-cashback:            #8529cd;
+  --text-cashback-in-store:   #8529cd;
+  --text-action-rak-plus:     #936816;
+  --text-cashback-rak-plus:   #936816;
+  --text-brand-rak-plus:      #936816;
+  --text-status-urgency-low:  #134028;
+  --text-status-urgency-med:  #ae5308;
+  --text-status-urgency-high: #b90037;
+}
+
+/* ==========================================================================
+   3. Fill Colors
+   ========================================================================== */
+
+:root {
+  --fill-default:               #ffffff;
+  --fill-inverse-default:       #22202d;
+  --fill-emphasis-med:          #f2f1f9;
+  --fill-emphasis-high:         #480081;
+  --fill-brand:                 #8529cd;
+  --fill-brand-rak-plus:        #936816;
+  --fill-section-inverse-primary:   #242463;
+  --fill-light:                 #f2f1f9;
+  --fill-status-urgency-low:    #d6f6b5;
+  --fill-status-urgency-med:    #ffefb5;
+  --fill-status-urgency-high:   #ffe2eb;
+  --fill-cta-primary:           #8529cd;
+  --fill-cta-secondary:         #f2f1f9;
+  --fill-cta-primary-neutral:   #22202d;
+  --fill-cta-inverse:           #ffffff;
+  --fill-cta-transparent:       #22202d;
+  --fill-cta-inverse-transparent: #ffffff;
+  --fill-cta-favorite:          #e80c5b;
+  --fill-cta-primary-rak-plus:  #936816;
+}
+
+/* ==========================================================================
+   4. Border Colors
+   ========================================================================== */
+
+:root {
+  --border-default:          #e7e4f1;
+  --border-primary:          #22202d;
+  --border-emphasis:         #22202d;
+  --border-inverse:          #ffffff;
+  --border-focused:          #8529cd;
+  --border-inverse-focused:  #ffffff;
+  --border-divider:          #e7e4f1;
+  --border-listview-divider: #f4f3fe;
+  --border-icon-container:   #dddddd;
+  --border-container:        #22202d;
+}
+
+/* ==========================================================================
+   5. State Colors
+   ========================================================================== */
+
+:root {
+  /* Overlay colors applied on top of a surface to indicate interaction.
+     These are semi-transparent and must be layered over a background. */
+  --state-hover:            #22202d14; /* dark @ 8%  */
+  --state-pressed:          #22202d0a; /* dark @ 4%  */
+  --state-selected:         #480081;
+  --state-unselected:       #7a7788;
+  --state-disabled:         #22202d66; /* dark @ 40% */
+  --state-focused:          #8529cd;
+  --state-error:            #b90037;
+  --state-info:             #3e3e9d;
+  --state-success:          #33823f;
+  --state-warning:          #ee6b00;
+  --state-inverse-hover:      #ffffff33; /* white @ 20% */
+  --state-inverse-pressed:    #ffffff1f; /* white @ 12% */
+  --state-inverse-selected:   #ffffff;
+  --state-inverse-unselected: #aca9bc;
+  --state-inverse-disabled:   #ffffff66; /* white @ 40% */
+}
+
+/* ==========================================================================
+   6. Brand Colors
+   ========================================================================== */
+
+:root {
+  --brand-purple:    #8529cd;
+  --brand-darkindigo: #242463;
+}
+
+/* ==========================================================================
+   7. Drop Shadows
+   ========================================================================== */
+
+:root {
+  /* Default: cards, tiles at rest */
+  --shadow-default:                   0 3px 16px 1px #22202d0f;
+  /* Hover elevation */
+  --shadow-default-hover:             0 3px 16px 1px #22202d1a;
+  /* Pressed / active state */
+  --shadow-default-pressed:           0 3px 8px 1px  #22202d0f;
+  /* Cards on dark/inverse backgrounds */
+  --shadow-dark-background:           0 4px 8px  0   #0a1646cc;
+  --shadow-hover-on-dark-background:  0 4px 11px 0   #0a1646d4;
+  /* Extra-pronounced elevation */
+  --shadow-emphasized:                0 3px 16px 1px #22202d1a;
+  /* Sticky nav bar casting shadow downward */
+  --shadow-navigation-bottom:         0 -2px 16px 0  #22202d1f;
+  /* Modal overlay */
+  --shadow-modal:                     0 4px 16px 0   #22202d73;
+  /* List-view rows */
+  --shadow-listview:                  0 3px 8px  1px #22202d0f;
+}
+
+/* ==========================================================================
+   8. Typography
+   Font families:
+     - "Rakuten Sans UI" — UI text at all sizes
+     - "Stag"            — Display and H1 headings
+   ========================================================================== */
+
+/* --- Common Scale -------------------------------------------------------- */
+
+.type-body {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-descriptor-l {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-descriptor-m {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-descriptor-s {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-descriptor-xs {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0;
+}
+
+.type-descriptor-xxs {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.type-tag-l {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.type-tag-s {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.type-strikethrough {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0;
+  text-decoration: line-through;
+}
+
+.type-button-l {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-button-m {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-button-s {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-link {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-subnav {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.type-fine-print {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.type-l0-tags {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+/* --- Display / Structural ------------------------------------------------ */
+
+.type-display-brand {
+  font-family: "Stag", serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 36px;
+  letter-spacing: 0;
+}
+
+.type-display-default {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 40px;
+  letter-spacing: -1px;
+}
+
+/* Large Screens (960+) variants */
+.type-display-brand-desktop {
+  font-family: "Stag", serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 36px;
+  letter-spacing: 0;
+}
+
+.type-display-default-desktop {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 44px;
+  letter-spacing: -1px;
+}
+
+/* --- Header Scale -------------------------------------------------------- */
+
+.type-header-l {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-header-m {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-header-s {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0;
+}
+
+/* Large Screens (960+) header variants */
+.type-header-l-desktop {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: 0;
+}
+
+.type-header-m-desktop {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0;
+}
+
+/* --- Body Scale ---------------------------------------------------------- */
+
+.type-body-l {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-body-l-emphasis {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-body-m {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-body-m-emphasis {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-body-default {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-body-default-emphasis {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-body-xs {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.type-body-xs-emphasis {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+/* --- Utility ------------------------------------------------------------- */
+
+.type-eyebrow {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* --- Responsive Heading Scale -------------------------------------------- */
+/* Small (mobile) */
+
+.type-hero-sm {
+  font-family: "Stag", serif;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 44px;
+  letter-spacing: 0;
+}
+
+.type-h1-sm {
+  font-family: "Stag", serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 0;
+}
+
+.type-h2-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-h3-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-banner-l-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-banner-s-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-subheader-l-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-subheader-s-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.type-nav-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-cashback-sm {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+/* Medium (tablet) */
+
+.type-hero-md {
+  font-family: "Stag", serif;
+  font-size: 46px;
+  font-weight: 400;
+  line-height: 48px;
+  letter-spacing: 0;
+}
+
+.type-h1-md {
+  font-family: "Stag", serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 44px;
+  letter-spacing: 0;
+}
+
+.type-h2-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: 0;
+}
+
+.type-h3-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0;
+}
+
+.type-banner-l-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 34px;
+  letter-spacing: 0;
+}
+
+.type-banner-s-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-subheader-l-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-subheader-s-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-nav-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-cashback-md {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0;
+}
+
+/* Large (desktop) */
+
+.type-hero-lg {
+  font-family: "Stag", serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 66px;
+  letter-spacing: 0;
+}
+
+.type-h1-lg {
+  font-family: "Stag", serif;
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 56px;
+  letter-spacing: 0;
+}
+
+.type-h2-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: 0;
+}
+
+.type-h3-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0;
+}
+
+.type-banner-l-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 34px;
+  letter-spacing: 0;
+}
+
+.type-banner-s-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-subheader-l-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.type-subheader-s-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.type-nav-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.type-cashback-lg {
+  font-family: "Rakuten Sans UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0;
+}

@@ -1,0 +1,1653 @@
+/*
+ * radiant-components.css
+ * Rakuten Radiant UIKit — Component Library
+ *
+ * Always load AFTER radiant-foundations.css:
+ *   <link rel="stylesheet" href="path/to/radiant-foundations.css">
+ *   <link rel="stylesheet" href="path/to/radiant-components.css">
+ *
+ * Source files: preview/buttons.html, components.html, components2.html,
+ *               components3.html, components4.html, components5.html, components6.html
+ *
+ * Table of Contents
+ * ─────────────────────────────────────────────────────────
+ *  1.  Reset / Body defaults
+ *  2.  Buttons
+ *  3.  Brand Marks & Brand Images
+ *  4.  Form Fields
+ *  5.  Checkbox
+ *  6.  Radio
+ *  7.  Dropdown
+ *  8.  Floating Tag
+ *  9.  Tags In-Line (Cashback)
+ * 10.  Badge
+ * 11.  Card Description
+ * 12.  Divider
+ * 13.  Toggle
+ * 14.  Stepper
+ * 15.  Chip
+ * 16.  Store Logo Tile
+ * 17.  Store Mark Tile
+ * 18.  Store Mark List Tile
+ * 19.  Store Image Tile
+ * 20.  Hot Deals Tile
+ * 21.  Product Tile
+ * 22.  Category Tile
+ * 23.  Hero Tile
+ * 24.  Creative Blocks
+ * 25.  Topic Header
+ * 26.  Carousel
+ * 27.  Topic Grid
+ * 28.  Global Header (Web)
+ * 29.  Web Footer
+ * 30.  Accordion
+ * 31.  Modal
+ * 32.  Bottom Sheet
+ * ─────────────────────────────────────────────────────────
+ */
+
+/* ═════════════════════════════════════════════════════════════════
+   1. RESET / BODY DEFAULTS
+═════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Rakuten Sans UI', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   2. BUTTONS
+   Source: preview/buttons.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Buttons
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Fill/CTA/Primary    #8529cd   → var(--fill-cta-primary)
+     Fill/CTA/Secondary  #f2f1f9   → var(--fill-cta-secondary)
+     Fill/CTA/Inverse    #ffffff   → var(--fill-cta-inverse)
+     Fill/CTA/Primary Neutral #22202d → var(--fill-cta-primary-neutral)
+     State/Hover         rgba(34,32,45,0.08) → var(--state-hover)
+     State/Pressed       rgba(34,32,45,0.12) → var(--state-pressed)
+     State/Inverse/Hover rgba(255,255,255,0.08) → var(--state-inverse-hover)
+     Palette/Purple/300  #6a1fa8   → var(--palette-purple-300)   [hover bg]
+     Palette/Purple/400  #4c1578   → var(--palette-purple-400)   [pressed bg]
+     Shadow/Default/Hover          → var(--shadow-default-hover)
+     Shadow/Default                → var(--shadow-default)
+═════════════════════════════════════════════════════════════════ */
+
+/* Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-family: 'Rakuten Sans UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  -webkit-font-smoothing: antialiased;
+  outline: none;
+  --fill-0: #22202d; /* icon color helper */
+}
+.btn:disabled { cursor: not-allowed; opacity: 0.4; }
+.btn img, .btn svg { flex-shrink: 0; }
+
+/* Sizes */
+.btn-lg { height: 55px; padding: 0 24px; font-size: 18px; line-height: 1.25; }
+.btn-md { height: 44px; padding: 0 20px; font-size: 16px; line-height: 20px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 14px; line-height: 20px; }
+
+/* Primary */
+.btn-primary { background: var(--fill-cta-primary); color: #fff; --fill-0: #ffffff; }
+.btn-primary:not(:disabled):hover  { background: var(--palette-purple-300); box-shadow: var(--shadow-default-hover); }
+.btn-primary:not(:disabled):active { background: var(--palette-purple-400); box-shadow: none; }
+.btn-primary:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+
+/* Secondary */
+.btn-secondary { background: var(--fill-cta-secondary); color: var(--text-primary); border-color: var(--border-default); }
+.btn-secondary:not(:disabled):hover  { background: #e7e4f6; box-shadow: var(--shadow-default-hover); }
+.btn-secondary:not(:disabled):active { background: #dbd8f2; box-shadow: none; }
+.btn-secondary:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+
+/* Tertiary (ghost on light) */
+.btn-tertiary { background: transparent; color: var(--text-primary); padding-left: 12px; padding-right: 12px; }
+.btn-tertiary:not(:disabled):hover  { background: var(--state-hover); }
+.btn-tertiary:not(:disabled):active { background: var(--state-pressed); }
+.btn-tertiary:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+
+/* Tertiary Inverse (ghost on dark) */
+.btn-tertiary-inv { background: transparent; color: #fff; padding-left: 12px; padding-right: 12px; --fill-0: #ffffff; }
+.btn-tertiary-inv:not(:disabled):hover  { background: var(--state-inverse-hover); }
+.btn-tertiary-inv:not(:disabled):active { background: var(--state-inverse-pressed); }
+.btn-tertiary-inv:focus-visible { box-shadow: 0 0 0 2px var(--palette-almost-black), 0 0 0 4px #fff; }
+
+/* Tertiary + Icon (text button with leading/trailing icon) */
+.btn-ticon { background: transparent; color: var(--text-primary); padding-left: 12px; padding-right: 12px; }
+.btn-ticon:not(:disabled):hover  { background: var(--state-hover); }
+.btn-ticon:not(:disabled):active { background: var(--state-pressed); }
+.btn-ticon:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+.btn-ticon.is-added { color: var(--text-brand); --fill-0: #8529cd; }
+
+/* Inverse Primary (white on dark background) */
+.btn-inverse { background: var(--fill-cta-inverse); color: var(--fill-cta-primary); }
+.btn-inverse:not(:disabled):hover  { background: rgba(255,255,255,0.88); box-shadow: var(--shadow-default-hover); }
+.btn-inverse:not(:disabled):active { background: rgba(255,255,255,0.80); box-shadow: none; }
+
+/* Icon Button (48×48, no label) */
+.btn-icon {
+  width: 48px; height: 48px; padding: 0;
+  background: transparent; color: var(--text-primary);
+  border-radius: 9999px; border: none;
+}
+.btn-icon:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+.btn-icon img { width: 24px; height: 24px; }
+
+/* Floating Icon Button (shadow-based hover/pressed) */
+.btn-icon-floating { background: var(--fill-default); box-shadow: var(--shadow-default); }
+.btn-icon-floating:not(:disabled):hover  { box-shadow: var(--shadow-default-hover); }
+.btn-icon-floating:not(:disabled):active { box-shadow: var(--shadow-default-pressed); }
+
+/* Filter Button */
+.btn-filter {
+  background: var(--fill-cta-secondary); color: var(--text-primary);
+  border-color: var(--border-default); height: 44px; padding: 0 16px; font-size: 14px;
+}
+.btn-filter img { width: 18px; height: 18px; }
+.btn-filter:not(:disabled):hover  { background: #e7e4f6; box-shadow: var(--shadow-default-hover); }
+.btn-filter:not(:disabled):active { background: #dbd8f2; }
+.btn-filter:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+.btn-filter.is-selected { border-color: var(--border-primary); }
+.btn-filter-icon { width: 48px; height: 40px; padding: 0; }
+
+/* Link Button (inline underlined) */
+.btn-link {
+  display: inline; background: none; border: none; border-radius: 0;
+  color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px;
+  padding: 0; font-family: 'Rakuten Sans UI', system-ui, sans-serif;
+  font-size: inherit; font-weight: 400; cursor: pointer; transition: color 0.15s;
+}
+.btn-link:not(:disabled):hover { color: var(--text-brand); }
+.btn-link:disabled { cursor: not-allowed; opacity: 0.4; }
+.btn-link:focus-visible { outline: 2px solid var(--border-focused); outline-offset: 2px; border-radius: 2px; }
+
+/* Link CTA (standalone: "Label →") */
+.btn-link-cta {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-family: inherit; font-size: 16px; font-weight: 600; line-height: 20px;
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-link-dark  { color: var(--fill-cta-primary-neutral); }
+.btn-link-light { color: var(--fill-cta-inverse); }
+
+/* Social Buttons */
+.btn-social {
+  background: var(--fill-cta-secondary); color: var(--text-primary);
+  border-color: var(--border-default); height: 44px; padding: 0 24px;
+  font-size: 16px; min-width: 260px; justify-content: center; gap: 12px;
+}
+.btn-social img { width: 20px; height: 20px; object-fit: contain; }
+.btn-social:not(:disabled):hover  { background: #e7e4f6; box-shadow: var(--shadow-default-hover); }
+.btn-social:not(:disabled):active { background: #dbd8f2; }
+.btn-social:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); }
+
+/* Loading Spinner (inside any .btn) */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block; flex-shrink: 0; border-radius: 50%;
+  border: 2px solid currentColor; border-top-color: transparent;
+  animation: spin 0.75s linear infinite;
+}
+.btn-md .spinner, .btn-filter .spinner { width: 16px; height: 16px; }
+.btn-lg .spinner { width: 18px; height: 18px; border-width: 2.5px; }
+.btn-sm .spinner { width: 14px; height: 14px; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   3. BRAND MARKS & BRAND IMAGES
+   Source: preview/components.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Brand Mark / 1. Brand Image
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Large=24    → border-radius (square)
+     Full=999    → border-radius (round)
+     Fill/Default → light background
+     Fill/Emphasis/High #480081 → dark background
+     Shadow/Default → var(--shadow-default)
+     Palette/Purple/15 #e4e0fc → brand image placeholder
+═════════════════════════════════════════════════════════════════ */
+
+.brand-mark {
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+
+/* Shape */
+.brand-mark-sq { width: 88px; height: 88px; border-radius: 24px; }
+.brand-mark-rd { width: 64px; height: 64px; border-radius: 9999px; }
+
+/* Color */
+.brand-mark-light { background: var(--fill-default); border: 1px solid var(--state-hover); box-shadow: var(--shadow-default); }
+.brand-mark-dark  { background: var(--fill-emphasis-high); }
+
+/* Brand Images (placeholder for merchant images) */
+.brand-image { background: var(--palette-purple-15); border-radius: 24px; flex-shrink: 0; }
+.brand-image-desktop { width: 270px; height: 136px; }
+.brand-image-mobile  { width: 180px; height: 120px; }
+.brand-image-sq      { width: 88px; height: 88px; border-radius: 16px; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   4. FORM FIELDS
+   Source: preview/components.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Form Field
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Small=10  → border-radius: 10px
+     Height: 48px
+     Body/Body Default Regular 14/20
+     Border/Default #e7e4f1 → default border
+     State/Unselected #7a7788 → hover border
+     Border/Focused #8529cd → focus ring
+     State/Error #b90037 → error border
+     State/Disabled rgba(34,32,45,0.4) → var(--state-disabled)
+═════════════════════════════════════════════════════════════════ */
+
+.field-wrap { display: flex; flex-direction: column; gap: 4px; }
+
+.field {
+  height: 48px; border-radius: 10px; border: 1px solid var(--border-default);
+  background: var(--fill-default); display: flex; align-items: center;
+  padding: 0 16px; gap: 8px;
+  font-family: 'Rakuten Sans UI', system-ui, sans-serif;
+  font-size: 14px; font-weight: 400; line-height: 20px;
+  color: var(--text-tertiary); outline: none; width: 280px;
+  transition: border-color 0.15s, box-shadow 0.15s; cursor: text;
+}
+input.field { color: var(--text-primary); }
+input.field::placeholder { color: var(--text-tertiary); }
+
+.field:hover:not(.field-disabled):not(.field-error):not(.field-focus) {
+  border-color: var(--state-unselected);
+}
+.field:focus:not(.field-error), .field-focus {
+  border-color: transparent; box-shadow: 0 0 0 2px var(--border-focused);
+}
+.field-error  { border-color: var(--state-error); color: var(--text-primary); }
+.field-disabled, .field:disabled { border-color: var(--state-disabled); color: var(--state-disabled); cursor: not-allowed; }
+.field-filled { color: var(--text-primary); }
+
+.field-error-msg { font-size: 12px; font-weight: 400; line-height: 16px; color: var(--state-error); }
+.field-icon { color: var(--text-tertiary); flex-shrink: 0; }
+.field-icon img { width: 16px; height: 16px; display: block; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   5. CHECKBOX
+   Source: preview/components.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Checkbox
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     XSmall=8 → border-radius: 8px
+     Size: 24×24
+     State/Unselected #7a7788 → unchecked border
+     State/Selected #480081 → checked fill
+     Border/Focused #8529cd → focus ring
+═════════════════════════════════════════════════════════════════ */
+
+.checkbox-wrap {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+}
+.checkbox-wrap input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+
+.checkbox-ctrl {
+  width: 24px; height: 24px; flex-shrink: 0; border-radius: 8px;
+  border: 2px solid var(--state-unselected); background: var(--fill-default);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.checkbox-wrap:hover .checkbox-ctrl { border-color: var(--text-primary); }
+.checkbox-wrap input:checked ~ .checkbox-ctrl { background: var(--state-selected); border-color: var(--state-selected); }
+.checkbox-ctrl::after {
+  content: ''; display: block; width: 11px; height: 7px;
+  border-left: 2px solid white; border-bottom: 2px solid white;
+  transform: rotate(-45deg) translate(1px, -1px); opacity: 0; transition: opacity 0.1s;
+}
+.checkbox-wrap input:checked ~ .checkbox-ctrl::after { opacity: 1; }
+.checkbox-wrap input:focus-visible ~ .checkbox-ctrl { box-shadow: 0 0 0 3px var(--border-focused); }
+.checkbox-wrap.is-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.checkbox-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   6. RADIO
+   Source: preview/components.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Radio
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Full=999 → border-radius: 9999px
+     Same states as checkbox
+═════════════════════════════════════════════════════════════════ */
+
+.radio-wrap {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+}
+.radio-wrap input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+
+.radio-ctrl {
+  width: 24px; height: 24px; flex-shrink: 0; border-radius: 9999px;
+  border: 2px solid var(--state-unselected); background: var(--fill-default);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.radio-wrap:hover .radio-ctrl { border-color: var(--text-primary); }
+.radio-wrap input:checked ~ .radio-ctrl { border-color: var(--state-selected); background: var(--state-selected); }
+.radio-ctrl::after {
+  content: ''; display: block; width: 8px; height: 8px;
+  border-radius: 9999px; background: white; opacity: 0; transition: opacity 0.1s;
+}
+.radio-wrap input:checked ~ .radio-ctrl::after { opacity: 1; }
+.radio-wrap input:focus-visible ~ .radio-ctrl { box-shadow: 0 0 0 3px var(--border-focused); }
+.radio-wrap.is-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.radio-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   7. DROPDOWN
+   Source: preview/components.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Dropdown
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Shadow/Emphasized → var(--shadow-emphasized)   panel shadow
+     Small=10 → row border-radius
+     Body/Body Medium Emphasis 16/20 SemiBold → trigger text
+     Body/Body Default Regular 14/20 → row text
+     State/Hover → row hover bg
+   JS: toggle .is-open on .dropdown to show panel
+═════════════════════════════════════════════════════════════════ */
+
+.dropdown { position: relative; display: inline-block; }
+
+.dropdown-trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: 'Rakuten Sans UI', system-ui, sans-serif;
+  font-size: 16px; font-weight: 600; line-height: 20px;
+  color: var(--text-primary); -webkit-font-smoothing: antialiased;
+}
+.dropdown-trigger img { width: 16px; height: 16px; transition: transform 0.2s; }
+.dropdown.is-open .dropdown-trigger img { transform: rotate(180deg); }
+
+.dropdown-panel {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  min-width: 240px; background: var(--fill-default);
+  border-radius: 12px; box-shadow: var(--shadow-emphasized);
+  padding: 8px; display: none; z-index: 100;
+}
+.dropdown.is-open .dropdown-panel { display: block; }
+
+.dropdown-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 40px; padding: 0 12px; border-radius: 10px;
+  font-family: 'Rakuten Sans UI', system-ui, sans-serif;
+  font-size: 14px; font-weight: 400; line-height: 20px;
+  color: var(--text-primary); cursor: pointer; transition: background 0.1s;
+}
+.dropdown-row:hover { background: var(--state-hover); }
+.dropdown-row-check { width: 16px; height: 16px; flex-shrink: 0; opacity: 0; }
+.dropdown-row.is-selected .dropdown-row-check { opacity: 1; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   8. FLOATING TAG
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Floating Tag
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Full=999 → border-radius: 9999px
+     Height: 24px · Padding: 0 8px
+     Utility/Tag SemiBold 11/14
+     Border/Container = var(--state-hover) (#22202d14)
+     Fill/Brand #8529cd → inverse bg
+═════════════════════════════════════════════════════════════════ */
+
+.ftag {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 24px; padding: 0 8px; border-radius: 9999px;
+  font-size: 11px; font-weight: 600; line-height: 14px;
+  white-space: nowrap;
+}
+.ftag svg { height: 10px; width: auto; flex-shrink: 0; }
+
+.ftag-default {
+  background: var(--fill-default); border: 1px solid var(--state-hover);
+  box-shadow: var(--shadow-default); color: var(--text-primary);
+}
+.ftag-inverse {
+  background: var(--fill-brand); color: var(--text-inverse-primary);
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   9. TAGS IN-LINE (Cashback / Text)
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Tags In-Line
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Text/Brand #8529cd → .em (emphasis cashback %)
+     Text/Secondary #464356 → .reg (de-emphasis)
+     Text/Inverse #ffffff → dark bg emphasis
+     Text/Inverse/Secondary #e7e4f1 → dark bg de-emphasis
+═════════════════════════════════════════════════════════════════ */
+
+.tag-cashback     { display: inline; line-height: 1.4; }
+.tag-cashback-sm  { font-size: 12px; }
+.tag-cashback-md  { font-size: 14px; }
+
+.tag-cashback .em  { font-weight: 600; color: var(--text-brand); }
+.tag-cashback .reg { font-weight: 400; color: var(--text-secondary); }
+
+.tag-cashback-inv .em  { font-weight: 600; color: var(--text-inverse); }
+.tag-cashback-inv .reg { font-weight: 400; color: var(--text-inverse-secondary); }
+
+/* Outlined pill tag */
+.tag-simple {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 24px; padding: 0 8px; border-radius: 9999px;
+  border: 1px solid var(--border-default);
+  font-size: 11px; font-weight: 600; line-height: 14px;
+  color: var(--text-primary); background: transparent;
+}
+.tag-simple svg { height: 10px; width: auto; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   10. BADGE (Urgency)
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Badge
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Utility/Tag SemiBold 11/14
+     Fill/Status/Urgency/High #ffe2eb → var(--fill-status-urgency-high)
+     Text/Status/Urgency/High #720827
+     Fill/Status/Urgency/Low (green) → var(--fill-status-urgency-low)
+     Text/Status/Urgency/Low #134028 → var(--text-status-urgency-low)
+     Palette/Purple/15 #e4e0fc → medium bg
+     Text/Brand #8529cd → medium text
+     Fill/Emphasis/Med → neutral bg
+═════════════════════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 24px; padding: 0 8px; border-radius: 9999px;
+  font-size: 11px; font-weight: 600; line-height: 14px; white-space: nowrap;
+}
+.badge svg { height: 10px; width: auto; }
+
+.badge-medium  { background: var(--palette-purple-15);           color: var(--text-brand); }
+.badge-high    { background: var(--fill-status-urgency-high);    color: #720827; }
+.badge-low     { background: var(--fill-status-urgency-low);     color: var(--text-status-urgency-low); }
+.badge-neutral { background: var(--fill-emphasis-med);           color: var(--text-primary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   11. CARD DESCRIPTION
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Card Description
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Large=24 → border-radius: 24px
+     Fill/Default → background
+     Border/Default → border
+     Body/Body Medium Emphasis 16/20 SemiBold → title
+     Body/Body Medium 16/20 → cashback
+     Body/Body Default Regular 14/20 → price, description
+═════════════════════════════════════════════════════════════════ */
+
+.card-desc {
+  background: var(--fill-default); border: 1px solid var(--border-default);
+  border-radius: 24px; padding: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.card-desc-desktop { width: 300px; }
+.card-desc-mobile  { width: 200px; }
+
+.card-desc-title   { font-size: 16px; font-weight: 600; line-height: 20px; color: var(--text-primary); }
+.card-desc-cashback { font-size: 16px; line-height: 20px; }
+.card-desc-cashback .em  { font-weight: 600; color: var(--text-brand); }
+.card-desc-cashback .reg { font-weight: 400; color: var(--text-secondary); }
+.card-desc-price {
+  font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary);
+  display: flex; align-items: baseline; gap: 6px;
+}
+.card-desc-price s { color: var(--text-tertiary); text-decoration-color: var(--text-tertiary); }
+.card-desc-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-tertiary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   12. DIVIDER
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Divider
+   ─────────────────────────────────────────────────────────────
+   Tokens: Border/Default #e7e4f1 · Body/Body Medium Regular 16/20
+═════════════════════════════════════════════════════════════════ */
+
+.divider { display: flex; align-items: center; gap: 12px; width: 100%; }
+.divider-line  { flex: 1; height: 1px; background: var(--border-default); }
+.divider-text  { font-size: 16px; font-weight: 400; line-height: 20px; color: var(--text-tertiary); white-space: nowrap; }
+.divider-plain { height: 1px; background: var(--border-default); width: 100%; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   13. TOGGLE
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Toggle
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Track: 44×26px · Full=999 (pill)
+     State/Unselected #7a7788 → off track
+     State/Selected #480081 → on track
+     Fill/Default #ffffff → thumb
+   JS: native <input type="checkbox"> handles state
+═════════════════════════════════════════════════════════════════ */
+
+.toggle-wrap { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.toggle-wrap input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.toggle-track {
+  position: relative; width: 44px; height: 26px; border-radius: 9999px;
+  background: var(--state-unselected); transition: background 0.2s ease; flex-shrink: 0;
+}
+.toggle-thumb {
+  position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 9999px;
+  background: var(--fill-default); box-shadow: 0 1px 3px #22202d33; transition: transform 0.2s ease;
+}
+.toggle-wrap input:checked ~ .toggle-track { background: var(--state-selected); }
+.toggle-wrap input:checked ~ .toggle-track .toggle-thumb { transform: translateX(18px); }
+.toggle-wrap input:focus-visible ~ .toggle-track { outline: 3px solid var(--border-focused); outline-offset: 2px; }
+.toggle-wrap.is-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.toggle-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   14. STEPPER
+   Source: preview/components2.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Stepper
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Full=999 → pill shape · Height: 48px
+     State/Unselected #7a7788 → border
+     Body/Body Medium Emphasis SemiBold 16/20 → count
+   JS: increment/decrement .stepper-value, disable btn at min/max
+═════════════════════════════════════════════════════════════════ */
+
+.stepper {
+  display: inline-flex; align-items: stretch; height: 48px;
+  border-radius: 9999px; border: 1.5px solid var(--state-unselected);
+  background: var(--fill-default); overflow: hidden;
+}
+.stepper-btn {
+  width: 48px; display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  font-size: 22px; font-weight: 300; line-height: 1; color: var(--text-primary);
+  flex-shrink: 0; transition: background 0.12s;
+}
+.stepper-btn:hover:not(:disabled)  { background: var(--state-hover); }
+.stepper-btn:active:not(:disabled) { background: var(--state-pressed); }
+.stepper-btn:disabled { color: var(--state-disabled); cursor: not-allowed; }
+.stepper-value {
+  flex: 1; min-width: 36px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   15. CHIP
+   Source: preview/components5.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Chips
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Full=999 → border-radius: 9999px · Height: 32px
+     Fill/Default #ffffff → background
+     Border/Default #e7e4f1 → border
+     State/Selected #480081 → selected fill
+     Body/Body Default Regular 14/20
+   JS: toggle .chip-selected on click
+═════════════════════════════════════════════════════════════════ */
+
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 32px; padding: 0 12px; border-radius: 9999px;
+  border: 1px solid var(--border-default); background: var(--fill-default);
+  font-family: inherit; font-size: 14px; font-weight: 400; line-height: 20px;
+  color: var(--text-primary); white-space: nowrap; cursor: pointer;
+  transition: background 0.12s, box-shadow 0.12s; flex-shrink: 0;
+}
+.chip:hover  { background: var(--state-hover); }
+.chip:active { background: var(--state-pressed); }
+.chip.chip-selected { background: var(--state-selected); color: #ffffff; border-color: transparent; }
+.chip:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--border-focused); outline: none; }
+
+/* Chip Group — horizontal scrollable row of chips */
+.chip-group {
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 0;
+}
+.chip-group::-webkit-scrollbar { display: none; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   16. STORE LOGO TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Store
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Border Radius/Medium=16 → logo container
+     Shadow/Default → var(--shadow-default)
+     Utility/Tag SemiBold 11/14 → cashback text
+     Text/Brand #8529cd → .em (cashback %)
+     Text/Secondary #464356 → .reg
+═════════════════════════════════════════════════════════════════ */
+
+.store-logo-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.slt-logo {
+  background: var(--fill-default); border-radius: 16px; box-shadow: var(--shadow-default);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.slt-logo img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+.slt-sm .slt-logo { width: 64px; height: 64px; }
+.slt-ml .slt-logo { width: 80px; height: 80px; }
+.slt-cashback { font-size: 11px; font-weight: 600; line-height: 14px; text-align: center; }
+.slt-cashback .em  { color: var(--text-brand); }
+.slt-cashback .reg { color: var(--text-secondary); }
+/* Inverse (dark bg) */
+.slt-inverse .slt-logo { background: rgba(255,255,255,0.12); box-shadow: none; }
+.slt-inverse .slt-cashback .em  { color: var(--text-inverse); }
+.slt-inverse .slt-cashback .reg { color: var(--text-inverse-secondary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   17. STORE MARK TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Store
+   ─────────────────────────────────────────────────────────────
+   Horizontal card: [logo] [name + cashback]
+   Small: 300×72 · M/L: 300×88
+   Tokens:
+     Border Radius/Medium=16 → card
+     Border/Container = var(--state-hover) (#22202d14)
+     Body/Body Medium Emphasis 16/20 → store name
+     Body/Body Default 14/20 → cashback
+═════════════════════════════════════════════════════════════════ */
+
+.store-mark {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--fill-default); border: 1px solid var(--state-hover);
+  border-radius: 16px; box-shadow: var(--shadow-default); width: 300px;
+}
+.store-mark-sm { height: 72px; padding: 0 16px; }
+.store-mark-ml { height: 88px; padding: 0 16px; }
+.sm-logo {
+  background: var(--fill-default); border-radius: 12px; box-shadow: var(--shadow-default);
+  overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.store-mark-sm .sm-logo { width: 40px; height: 40px; }
+.store-mark-ml .sm-logo { width: 48px; height: 48px; }
+.sm-logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.sm-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sm-name {
+  font-size: 16px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sm-cashback { font-size: 14px; line-height: 20px; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   18. STORE MARK LIST TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Store
+   ─────────────────────────────────────────────────────────────
+   Store Mark + right-side CTA (Shop btn or chevron)
+   Full-width by default; use width utilities if needed
+═════════════════════════════════════════════════════════════════ */
+
+.store-mark-list {
+  display: flex; align-items: center; gap: 0;
+  background: var(--fill-default); border: 1px solid var(--state-hover);
+  border-radius: 16px; box-shadow: var(--shadow-default);
+}
+.sml-sm { height: 72px; padding: 0 16px; width: 310px; }
+.sml-ml { height: 88px; padding: 0 16px; width: 346px; }
+.sml-body { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.sml-cta  { flex-shrink: 0; margin-left: 12px; }
+.sml-in-store { flex-direction: column; align-items: stretch; height: auto; padding: 14px 16px; }
+.sml-in-store .sml-body { width: 100%; }
+.sml-in-store .sml-cta  { margin-left: auto; margin-top: 0; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   19. STORE IMAGE TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Deals (WIP)
+   ─────────────────────────────────────────────────────────────
+   Image area + store logo overlay + deal copy
+   IMPORTANT: wrap in .sit-wrapper to enable hanging shop button
+   Width: 259px · Aspect ratios: 21/9, 1/1, 4/5
+   Shop button hangs -16px below the card's bottom-right
+═════════════════════════════════════════════════════════════════ */
+
+/* Wrapper — required for hanging shop button */
+.sit-wrapper { position: relative; display: inline-flex; flex-direction: column; }
+
+.store-image-tile {
+  display: flex; flex-direction: column;
+  background: var(--fill-default); border: 1px solid var(--state-hover);
+  border-radius: 16px; box-shadow: var(--shadow-default);
+  overflow: hidden; width: 259px;
+}
+.sit-media { position: relative; width: 100%; background: var(--palette-grey-25); }
+.sit-21-9  { aspect-ratio: 21/9; }
+.sit-1-1   { aspect-ratio: 1; }
+.sit-4-5   { aspect-ratio: 4/5; }
+.sit-media > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sit-logo-wrap { position: absolute; bottom: 8px; left: 8px; z-index: 1; }
+.sit-logo {
+  width: 36px; height: 36px; background: var(--fill-default); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-default); overflow: hidden;
+}
+.sit-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.sit-body { padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.sit-title { font-size: 16px; font-weight: 600; line-height: 20px; color: var(--text-primary); }
+.sit-desc  {
+  font-size: 14px; line-height: 20px; color: var(--text-tertiary);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+/* Shop button — 16px from right, -16px below card (hangs off the card) */
+.sit-shop-btn { position: absolute; right: 16px; bottom: -16px; z-index: 2; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   20. HOT DEALS TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Deals (WIP)
+   ─────────────────────────────────────────────────────────────
+   Horizontal: [logo] [deal copy + cashback + badge] [Get Code btn]
+   Small: 382px · M/L: 549px
+═════════════════════════════════════════════════════════════════ */
+
+.hot-deals-tile {
+  display: flex; flex-direction: row; align-items: center;
+  background: var(--fill-default); border: 1px solid var(--state-hover);
+  border-radius: 16px; box-shadow: var(--shadow-default);
+  padding: 16px; gap: 12px;
+}
+.hot-deals-tile-sm { width: 382px; }
+.hot-deals-tile-ml { width: 549px; }
+.hdt-logo {
+  width: 56px; height: 56px; background: var(--fill-default); border-radius: 14px;
+  border: 1px solid var(--state-hover); box-shadow: var(--shadow-default);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; overflow: hidden;
+}
+.hdt-logo img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+.hdt-card-desc { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.hdt-title {
+  font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   21. PRODUCT TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Product
+   ─────────────────────────────────────────────────────────────
+   Image top + text below. Floating tag top-left of image.
+   Small: 182px wide · M/L: 193px wide
+   Aspect ratios: 1/1, 4/5
+═════════════════════════════════════════════════════════════════ */
+
+.product-tile {
+  display: flex; flex-direction: column;
+  background: var(--fill-default); border-radius: 16px;
+  box-shadow: var(--shadow-default); overflow: hidden;
+}
+.pt-sm { width: 182px; }
+.pt-ml { width: 193px; }
+.pt-media { position: relative; width: 100%; background: var(--palette-grey-25); overflow: hidden; }
+.pt-square  { aspect-ratio: 1; }
+.pt-portrait { aspect-ratio: 4/5; }
+.pt-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pt-tag { position: absolute; top: 8px; left: 8px; }
+.pt-body { padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.pt-name {
+  font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pt-cashback { font-size: 14px; line-height: 20px; }
+.pt-price {
+  font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary);
+  display: flex; align-items: baseline; gap: 6px;
+}
+.pt-price s { color: var(--text-tertiary); text-decoration-color: var(--text-tertiary); }
+.pt-store { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-tertiary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   22. CATEGORY TILE
+   Source: preview/components3.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Category
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Large=24 → media border-radius: 24px
+     Border/Default → media border
+     Default M/L: 172×116 · Large M/L: 160×124
+     Small: 116×100 (Default) · 160×124 (Large)
+═════════════════════════════════════════════════════════════════ */
+
+.category-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.ct-media {
+  background: var(--palette-grey-25); border-radius: 24px;
+  border: 1px solid var(--border-default); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.ct-media img { width: 100%; height: 100%; object-fit: cover; }
+.ct-media-icon { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.ct-media-icon img { height: 40px; width: auto; }
+.ct-default-ml .ct-media { width: 172px; height: 116px; }
+.ct-large-ml .ct-media   { width: 160px; height: 124px; }
+.ct-default-sm .ct-media { width: 116px; height: 100px; }
+.ct-large-sm .ct-media   { width: 160px; height: 124px; }
+.ct-label {
+  font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   23. HERO TILE
+   Source: preview/components4.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Hero
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Fill/Emphasis/High #480081 → var(--fill-emphasis-high) (bg)
+     Medium=16 → border-radius
+     Shadow/Default → var(--shadow-default)
+     Text/Inverse/Primary #ffffff, Text/Inverse/Secondary #e7e4f1
+     Header/Header Medium 18/22 SemiBold (SM)
+     Header/Header Large 24/28 SemiBold (M/L)
+     Full=999 → avatar border-radius
+   IMPORTANT: Wrap in .hero-wrapper to enable hanging shop button
+   and floating tag straddling the top
+═════════════════════════════════════════════════════════════════ */
+
+.hero-wrapper { position: relative; display: inline-flex; flex-direction: column; }
+.hero-tile {
+  background: var(--fill-emphasis-high); border-radius: 16px;
+  box-shadow: var(--shadow-default); overflow: hidden; position: relative;
+}
+.hero-sm { width: 380px; }
+.hero-ml { width: 528px; }
+
+/* Section Hero (no image) */
+.hero-section .hero-body { display: flex; flex-direction: column; gap: 6px; padding: 20px; }
+.hero-sm.hero-section .hero-body     { padding: 16px; }
+.hero-sm.hero-section .hero-headline { font-size: 18px; line-height: 22px; }
+.hero-ml.hero-section .hero-headline { font-size: 24px; line-height: 28px; }
+.hero-section .hero-spacer { flex: 1; }
+
+/* Page Hero (with image placeholder on right) */
+.hero-page { display: flex; flex-direction: row; align-items: stretch; }
+.hero-page .hero-body { display: flex; flex-direction: column; gap: 6px; padding: 20px; flex: 1; }
+.hero-sm.hero-page .hero-body     { padding: 16px; }
+.hero-sm.hero-page .hero-headline { font-size: 18px; line-height: 22px; }
+.hero-ml.hero-page .hero-headline { font-size: 24px; line-height: 28px; }
+.hero-img-placeholder {
+  width: 44%; flex-shrink: 0; border-radius: 12px; margin: 12px 12px 12px 0;
+  background: repeating-conic-gradient(#d9d9d9 0% 25%, transparent 0% 50%) 0 0 / 16px 16px;
+  background-color: #ebebeb;
+}
+
+/* Floating tag — straddles top-left */
+.hero-floating-tag { position: absolute; top: -12px; left: 16px; z-index: 3; }
+/* Shop button — hangs -16px off bottom-right (Page Hero only) */
+.hero-shop-btn-hanging { position: absolute; right: 16px; bottom: -16px; z-index: 2; }
+
+/* Hero typography */
+.hero-mark { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.hero-avatar {
+  width: 32px; height: 32px; border-radius: 9999px;
+  background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.hero-avatar img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.hero-merchant-name { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-inverse-primary); }
+.hero-eyebrow {
+  font-size: 12px; font-weight: 600; line-height: 16px;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--text-inverse-secondary);
+}
+.hero-headline { font-weight: 600; color: var(--text-inverse-primary); margin: 0; }
+.hero-cashback { font-size: 14px; line-height: 20px; }
+.hero-cashback .em  { font-weight: 600; color: var(--text-inverse-primary); }
+.hero-cashback .reg { font-weight: 400; color: var(--text-inverse-secondary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   24. CREATIVE BLOCKS
+   Source: preview/components4.html
+   Figma: ⚛️ Radiant UIKit Components › 2. Creative Blocks
+   ─────────────────────────────────────────────────────────────
+   Background themes: .cb-light (blue gradient), .cb-dark (deep navy)
+   Variants: .cb-emphasized, .cb-text-block, .cb-block-lg, .cb-block-sm
+   Stag font (display headings) falls back to serif if not loaded
+═════════════════════════════════════════════════════════════════ */
+
+/* Background themes */
+.cb-light {
+  background: #f2f9fd; position: relative; overflow: hidden;
+}
+.cb-light::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 90% at 75% 110%, #d9ecf7 0%, transparent 60%),
+    radial-gradient(ellipse 90% 120% at -10% 20%, #d9ecf7 0%, transparent 55%);
+}
+.cb-dark {
+  background: #242463; position: relative; overflow: hidden;
+}
+.cb-dark::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 90% at 80% 110%, #2b83d3 0%, transparent 55%),
+    radial-gradient(ellipse 90% 120% at -10% 15%, #2b83d3 0%, transparent 55%);
+}
+
+/* Emphasized block */
+.cb-emphasized {
+  border-radius: 16px; padding: 48px 40px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 20px;
+}
+.cb-emphasized-lg { max-width: 1288px; width: 100%; padding: 56px 120px; }
+.cb-emphasized-sm { width: 410px; padding: 40px 32px; }
+
+.cb-display-lg { font-family: 'Stag', serif; font-size: 40px; font-weight: 300; line-height: 1.1; max-width: 720px; }
+.cb-display-sm { font-family: 'Stag', serif; font-size: 32px; font-weight: 300; line-height: 1.1; }
+.cb-emphasized .cb-display-lg,
+.cb-emphasized .cb-display-sm { color: var(--text-primary); }
+.cb-dark .cb-display-lg,
+.cb-dark .cb-display-sm       { color: var(--text-inverse-primary); }
+
+.cb-subline-em { font-size: 18px; font-weight: 600; line-height: 1.25; color: var(--text-primary); }
+.cb-dark .cb-subline-em { color: var(--text-inverse-primary); }
+
+/* Text block */
+.cb-text-block {
+  border-radius: 16px; padding: 48px 64px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 16px; max-width: 900px; width: 100%;
+}
+.cb-headline-lg { font-size: 24px; font-weight: 600; line-height: 28px; letter-spacing: -0.1px; color: var(--text-primary); }
+.cb-dark .cb-headline-lg { color: var(--text-inverse-primary); }
+.cb-body-lg { font-size: 18px; font-weight: 400; line-height: 22px; color: var(--text-secondary); max-width: 580px; }
+.cb-dark .cb-body-lg { color: var(--text-inverse-primary); opacity: 0.85; }
+
+/* Blocks Large (side-by-side text + collage) */
+.cb-block-lg {
+  border-radius: 16px; max-width: 1288px; width: 100%; min-height: 320px;
+  display: flex; flex-direction: row; align-items: stretch; overflow: hidden;
+}
+.cb-block-lg-text {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  gap: 16px; padding: 48px 56px; position: relative; z-index: 1;
+}
+.cb-headline-desktop { font-size: 32px; font-weight: 600; line-height: 1.25; letter-spacing: -0.1px; color: var(--text-primary); max-width: 400px; }
+.cb-dark .cb-headline-desktop { color: var(--text-inverse-primary); }
+.cb-block-lg .cb-body-lg { max-width: 360px; }
+.cb-block-lg-collage {
+  width: 48%; flex-shrink: 0; position: relative; overflow: hidden; min-height: 300px;
+}
+.cb-collage-logo {
+  position: absolute; max-height: 36px; width: auto;
+  object-fit: contain; border-radius: 8px; background: rgba(255,255,255,0.9);
+  padding: 4px 8px; box-shadow: var(--shadow-default);
+}
+
+/* Blocks Small (stacked, narrow) */
+.cb-block-sm {
+  border-radius: 16px; width: 360px; min-height: 280px;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.cb-block-sm-text {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  gap: 12px; padding: 28px 28px 20px; position: relative; z-index: 1;
+}
+.cb-block-sm-collage { height: 180px; position: relative; overflow: hidden; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   25. TOPIC HEADER
+   Source: preview/components5.html
+   Figma: ⚛️ Radiant UIKit Components › 1. Text Layouts / Topic Header
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Header Medium Desktop: SemiBold 24/1.25 → title
+     Body/Body Medium Regular 16/20 → description
+     Body/Body Medium Emphasis 16/20 → action links
+   On dark: add .on-dark-section to parent section
+═════════════════════════════════════════════════════════════════ */
+
+.topic-header { display: flex; flex-direction: column; gap: 6px; padding: 24px 0 16px; }
+.topic-header-row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topic-header-title { font-size: 24px; font-weight: 600; line-height: 1.25; color: var(--text-primary); }
+.topic-header-desc  { font-size: 16px; font-weight: 400; line-height: 20px; color: var(--text-secondary); }
+.topic-header-actions { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+.topic-header-action {
+  font-size: 16px; font-weight: 600; line-height: 20px; color: var(--text-primary);
+  background: none; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+  text-decoration: none; white-space: nowrap;
+}
+.topic-header-action svg { width: 16px; height: 16px; }
+
+/* Topic Section containers */
+.topic-section { padding: 0 48px 48px; }
+.topic-section + .topic-section { border-top: 1px solid var(--border-default); }
+.on-dark-section { background: var(--palette-almost-black); }
+.on-dark-section .topic-header-title  { color: var(--text-inverse-primary); }
+.on-dark-section .topic-header-desc   { color: var(--text-inverse-secondary); }
+.on-dark-section .topic-header-action { color: var(--text-inverse-primary); }
+.on-dark-section .topic-see-all       { color: var(--text-inverse-primary); }
+.on-dark-section + .on-dark-section   { border-top: 1px solid rgba(255,255,255,0.08); }
+
+.urgency-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #ffe2eb; color: #720827;
+  font-size: 11px; font-weight: 600; line-height: 14px;
+  border-radius: 9999px; padding: 3px 8px; white-space: nowrap;
+}
+
+.topic-see-all { text-align: center; padding: 20px 0 4px; font-size: 16px; font-weight: 600; color: var(--text-primary); cursor: pointer; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   26. CAROUSEL
+   Source: preview/components5.html
+   ─────────────────────────────────────────────────────────────
+   CSS scroll-snap horizontal carousel with nav arrow buttons
+   JS: carouselScroll(trackEl, dir) — scrolls by one item width
+═════════════════════════════════════════════════════════════════ */
+
+.carousel-outer { position: relative; }
+.carousel-track {
+  display: flex; gap: 12px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding: 16px 0 24px; -webkit-overflow-scrolling: touch;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track > * { scroll-snap-align: start; flex-shrink: 0; }
+
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 9999px;
+  background: var(--fill-default); border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-default-hover); cursor: pointer; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text-primary); transition: box-shadow 0.12s;
+}
+.carousel-btn:hover { background: var(--fill-emphasis-med); }
+.carousel-btn-next { right: -8px; }
+.carousel-btn-prev { left: -8px; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   27. TOPIC GRID
+   Source: preview/components5.html
+   ─────────────────────────────────────────────────────────────
+   CSS Grid layout for topic content sections
+═════════════════════════════════════════════════════════════════ */
+
+.topic-grid { display: grid; gap: 12px; padding: 16px 0; }
+.tg-1 { grid-template-columns: 1fr; }
+.tg-2 { grid-template-columns: repeat(2, 1fr); }
+.tg-3 { grid-template-columns: repeat(3, 1fr); }
+.tg-4 { grid-template-columns: repeat(4, 1fr); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   28. GLOBAL HEADER (Web)
+   Source: preview/components6.html
+   Figma: 1. Navigation › Web Header
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Fill/Default #fff → background
+     Fill/Brand #8529cd → search button bg
+     Body/Body Default Regular/Emphasis 14/20 → nav text
+     Text/Tertiary #605c70 → placeholder
+     Small=10 → search bar radius
+     Border/Default #e7e4f1 → borders
+   .scrolled class adds shadow on scroll (add via JS)
+═════════════════════════════════════════════════════════════════ */
+
+/* Desktop header */
+.site-header {
+  background: var(--fill-default); border-bottom: 1px solid var(--border-default);
+  position: sticky; top: 0; z-index: 100;
+}
+.site-header.scrolled { box-shadow: var(--shadow-default); }
+
+.header-primary { display: flex; align-items: center; height: 56px; padding: 0 24px; gap: 20px; }
+.header-logo { flex-shrink: 0; }
+.header-logo img { height: 28px; width: auto; display: block; }
+
+.header-nav-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 14px; font-weight: 600; line-height: 20px;
+  color: var(--text-primary); background: none; border: none; cursor: pointer;
+  padding: 4px 8px; border-radius: 6px; white-space: nowrap; transition: background 0.12s;
+}
+.header-nav-btn:hover { background: var(--state-hover); }
+.header-nav-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.header-search {
+  flex: 1; max-width: 480px; display: flex; align-items: center;
+  border: 1px solid var(--border-default); border-radius: 10px; overflow: hidden; height: 40px;
+}
+.header-search-input {
+  flex: 1; border: none; outline: none;
+  font-family: inherit; font-size: 14px; line-height: 20px;
+  color: var(--text-primary); padding: 0 12px; background: transparent;
+}
+.header-search-input::placeholder { color: var(--text-tertiary); }
+.header-search-btn {
+  width: 40px; height: 40px; flex-shrink: 0; background: var(--fill-brand);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.header-search-btn svg { width: 16px; height: 16px; color: #fff; }
+
+.header-actions { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.header-action-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600; line-height: 20px;
+  color: var(--text-primary); background: none; border: none; cursor: pointer;
+  padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: background 0.12s;
+}
+.header-action-btn:hover { background: var(--state-hover); }
+.header-action-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.header-subnav {
+  display: flex; align-items: center; height: 40px; padding: 0 24px;
+  border-top: 1px solid var(--border-default); gap: 4px; overflow-x: auto; scrollbar-width: none;
+}
+.header-subnav::-webkit-scrollbar { display: none; }
+.header-subnav-item {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 14px; font-weight: 400; line-height: 20px;
+  color: var(--text-primary); background: none; border: none; cursor: pointer;
+  padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+  transition: background 0.12s; text-decoration: none;
+}
+.header-subnav-item:hover { background: var(--state-hover); }
+
+/* Mobile header */
+.site-header-mobile { background: var(--fill-default); border-bottom: 1px solid var(--border-default); }
+.header-mobile-top { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 16px; position: relative; }
+.header-mobile-hamburger {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  background: none; border: none; cursor: pointer;
+}
+.header-mobile-logo { position: absolute; left: 50%; transform: translateX(-50%); }
+.header-mobile-logo img { height: 24px; width: auto; }
+.header-mobile-search-wrap {
+  display: flex; align-items: center;
+  border: 1px solid var(--border-default); border-radius: 10px;
+  margin: 0 16px 12px; height: 40px; padding: 0 12px; gap: 8px;
+}
+.header-mobile-search-wrap input {
+  flex: 1; border: none; outline: none;
+  font-family: inherit; font-size: 14px; color: var(--text-primary); background: transparent;
+}
+.header-mobile-search-wrap input::placeholder { color: var(--text-tertiary); }
+
+/* ═════════════════════════════════════════════════════════════════
+   RESPONSIVE RULES — Component breakpoint: 960px
+   M/L → Small variant switch for components 16–27 & 32
+   ─────────────────────────────────────────────────────────────
+   Pattern: classes like .slt-ml, .hero-ml, .store-mark-ml etc.
+   adopt their -sm counterpart dimensions at ≤960px.
+   Fixed widths become full-width where layout allows.
+═════════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+
+  /* ── 16. Store Logo Tile ─────────────────────────────────── */
+  /* M/L (80px logo) → SM (64px logo) */
+  .slt-ml .slt-logo { width: 64px; height: 64px; }
+
+  /* ── 17. Store Mark Tile ─────────────────────────────────── */
+  /* M/L (88px, 48px logo) → SM (72px, 40px logo) */
+  .store-mark-ml { height: 72px; }
+  .store-mark-ml .sm-logo { width: 40px; height: 40px; }
+  /* Let mark tiles stretch full-width at mobile */
+  .store-mark { width: 100%; max-width: 360px; }
+
+  /* ── 18. Store Mark List Tile ────────────────────────────── */
+  /* M/L (88px, 346px) → SM (72px, 310px) */
+  .sml-ml { height: 72px; width: 100%; max-width: 360px; }
+  .sml-ml .sm-logo { width: 40px; height: 40px; }
+
+  /* ── 19. Store Image Tile ────────────────────────────────── */
+  /* No SM/ML class difference; let tile fill carousel track naturally */
+  .store-image-tile { width: 240px; }
+
+  /* ── 20. Hot Deals Tile ──────────────────────────────────── */
+  /* M/L (549px) → SM (382px) — or full-width in a list */
+  .hot-deals-tile-ml { width: 100%; max-width: 420px; }
+
+  /* ── 21. Product Tile ────────────────────────────────────── */
+  /* M/L (193px) → SM (182px) */
+  .pt-ml { width: 160px; }
+
+  /* ── 22. Category Tile ───────────────────────────────────── */
+  /* Default M/L (172×116) → SM (116×100) */
+  .ct-default-ml .ct-media { width: 116px; height: 100px; }
+  /* Large M/L (160×124) stays the same at SM */
+
+  /* ── 23. Hero Tile ───────────────────────────────────────── */
+  /* M/L (528px) → SM (380px) */
+  .hero-ml { width: 340px; }
+  .hero-ml.hero-section .hero-headline { font-size: 18px; line-height: 22px; }
+  .hero-ml.hero-page .hero-headline    { font-size: 18px; line-height: 22px; }
+
+  /* ── 24. Creative Blocks ─────────────────────────────────── */
+  /* Block Large: side-by-side → stacked column */
+  .cb-block-lg { flex-direction: column; min-height: auto; }
+  .cb-block-lg-collage { width: 100%; min-height: 220px; }
+  .cb-block-lg-text { padding: 32px 28px; }
+  .cb-headline-desktop { font-size: 24px; }
+  /* Emphasized block: reduce padding, full-width */
+  .cb-emphasized-lg { padding: 40px 28px; }
+  /* Text block: reduce padding */
+  .cb-text-block { padding: 40px 24px; }
+
+  /* ── 25. Topic Header ────────────────────────────────────── */
+  /* Title slightly smaller; actions wrap below on narrow screens */
+  .topic-header-title { font-size: 20px; }
+  .topic-header-row1 { flex-wrap: wrap; }
+  .topic-header-actions { flex-wrap: wrap; gap: 8px; }
+
+  /* ── 26. Carousel ────────────────────────────────────────── */
+  /* Hide arrow buttons — native touch scroll handles navigation */
+  .carousel-btn { display: none; }
+
+  /* ── 27. Topic Grid ──────────────────────────────────────── */
+  /* 3- and 4-col grids collapse to 2 columns */
+  .tg-3 { grid-template-columns: repeat(2, 1fr); }
+  .tg-4 { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── 32. Bottom Sheet ────────────────────────────────────── */
+  /* Already mobile-first; ensure full-width on narrow screens */
+  .sheet-card { border-radius: 24px 24px 0 0; max-width: 100%; }
+}
+
+/* Further collapse grids to 1 column on very small screens */
+@media (max-width: 480px) {
+  .tg-2 { grid-template-columns: 1fr; }
+  .tg-3 { grid-template-columns: 1fr; }
+  .tg-4 { grid-template-columns: 1fr; }
+  .hot-deals-tile { flex-wrap: wrap; }
+  .hot-deals-tile-ml,
+  .hot-deals-tile-sm { width: 100%; max-width: none; }
+}
+
+
+/* ── Responsive nav — collapses at 960px ── */
+
+/* Hide desktop-only elements below 960px */
+@media (max-width: 960px) {
+  .header-nav-btn { display: none; }
+  .header-search { display: none; }
+  .header-actions .header-action-btn:not(.header-action-keep) { display: none; }
+
+  /* Hamburger button — shown on mobile */
+  .header-hamburger-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 8px;
+    background: none; border: none; cursor: pointer; color: var(--text-primary);
+    transition: background 0.12s; flex-shrink: 0;
+  }
+  .header-hamburger-btn:hover { background: var(--state-hover); }
+
+  /* Mobile search icon button */
+  .header-search-icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 8px;
+    background: none; border: none; cursor: pointer; color: var(--text-primary);
+    transition: background 0.12s;
+  }
+  .header-search-icon-btn:hover { background: var(--state-hover); }
+
+  /* Logo centers when nav items are hidden */
+  .header-primary { gap: 8px; padding: 0 12px; }
+  .header-logo { margin-left: auto; margin-right: auto; }
+  .header-actions { margin-left: 0; }
+
+  /* Subnav becomes a compact scrolling strip */
+  .header-subnav { padding: 0 12px; }
+}
+
+/* Always hide hamburger on desktop */
+@media (min-width: 961px) {
+  .header-hamburger-btn { display: none; }
+  .header-search-icon-btn { display: none; }
+}
+
+/* Mobile nav drawer */
+.header-mobile-drawer {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; pointer-events: none;
+}
+.header-mobile-drawer.open { pointer-events: all; }
+
+.header-mobile-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0); transition: background 0.25s;
+  pointer-events: none;
+}
+.header-mobile-drawer.open .header-mobile-overlay {
+  background: rgba(0,0,0,0.4);
+  pointer-events: all;
+}
+
+.header-mobile-panel {
+  position: absolute; top: 0; left: 0; bottom: 0; width: 300px; max-width: 85vw;
+  background: var(--fill-default); overflow-y: auto;
+  transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column;
+}
+.header-mobile-drawer.open .header-mobile-panel { transform: translateX(0); }
+
+.header-mobile-panel-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 1px solid var(--border-default);
+}
+.header-mobile-panel-logo img { height: 22px; width: auto; }
+.header-mobile-close {
+  width: 36px; height: 36px; border-radius: 6px;
+  background: none; border: none; cursor: pointer; color: var(--text-primary);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s;
+}
+.header-mobile-close:hover { background: var(--state-hover); }
+
+.header-mobile-nav {
+  flex: 1; padding: 8px 0;
+}
+.header-mobile-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 13px 20px;
+  font-size: 15px; font-weight: 500; line-height: 1.3;
+  color: var(--text-primary); background: none; border: none;
+  cursor: pointer; text-align: left; text-decoration: none;
+  transition: background 0.1s;
+}
+.header-mobile-nav-item:hover { background: var(--state-hover); }
+.header-mobile-nav-divider {
+  height: 1px; background: var(--border-default); margin: 8px 0;
+}
+
+.header-mobile-panel-actions {
+  padding: 16px 20px; border-top: 1px solid var(--border-default);
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   29. WEB FOOTER
+   Source: preview/components6.html
+   Figma: 1. Navigation › Web Footer · node 267-22831
+   ─────────────────────────────────────────────────────────────
+   Tokens (from get_variable_defs, all three breakpoints):
+     Fill/Inverse Default      #22202d   → background
+     Text/Inverse Primary      #ffffff   → headings, legal
+     Text/Inverse Secondary    #e7e4f1   → links, secondary text
+     Fill/CTA/Inverse Transparent #ffffff29 (~rgba(255,255,255,0.16)) → social icon bg
+     Border/Inverse            #ffffff   → section divider (opacity overlay)
+     Full = 999                          → social icon border-radius
+     12 (spacing token)                  → social icon button padding (12px×2 + 16px icon = 40px btn)
+     Base/Grey/0 (White) #ffffff         → .footer-family bar background
+     Text/Tertiary #605c70               → .footer-family links
+   Breakpoints:
+     Large  (>960px)  : 4-col grid, padding 64px 144px 24px, bottom bar 1 row
+     Medium (375–960px): 4-col grid, padding 48px 40px 24px, bottom bar wraps
+     Small  (<375px)  : accordion sections, 2-col family bar
+   JS: toggleFooterAccordion(btn) — see components.md
+═════════════════════════════════════════════════════════════════ */
+
+.site-footer { background: var(--fill-inverse-default); color: var(--text-inverse-primary); font-size: 14px; line-height: 20px; }
+
+/* ── Desktop 4-column link grid (Large: 960+) ── */
+.footer-main {
+  max-width: 1440px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  padding: 64px 144px 24px;
+}
+.footer-col-heading { font-weight: 600; margin-bottom: 12px; color: var(--text-inverse-primary); }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { color: var(--text-inverse-secondary); text-decoration: none; font-size: 14px; line-height: 20px; transition: color 0.12s; }
+.footer-links a:hover { color: var(--text-inverse-primary); }
+.footer-links-sub { margin-top: 20px; }
+.footer-app-badges { display: flex; gap: 8px; margin-top: 8px; }
+.footer-app-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600;
+  color: var(--text-inverse-primary); white-space: nowrap; cursor: pointer;
+}
+
+/* ── Divider: Border/Inverse white at low opacity ── */
+.footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.15); max-width: 1440px; margin: 0 auto; }
+
+/* ── Bottom bar: legal + social ── */
+.footer-bottom {
+  max-width: 1440px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 144px; gap: 16px; flex-wrap: wrap;
+}
+.footer-legal { font-size: 14px; color: var(--text-inverse-primary); display: flex; gap: 16px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 0; }
+.footer-legal a { color: var(--text-inverse-primary); text-decoration: none; white-space: nowrap; }
+.footer-copyright { color: var(--text-inverse-primary); }
+
+/* ── Social icon buttons: Full=999, Fill/CTA/Inverse Transparent, padding=12 ── */
+.footer-social { display: flex; gap: 4px; flex-shrink: 0; }
+.footer-social-btn {
+  /* 40px visual circle: 12px pad + 16px icon + 12px pad */
+  width: 40px; height: 40px; border-radius: 9999px;
+  background: rgba(255,255,255,0.16); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; transition: background 0.12s; flex-shrink: 0;
+}
+.footer-social-btn:hover { background: rgba(255,255,255,0.25); }
+.footer-social-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* ── Family / Rakuten Group bar: Base/Grey/0, Text/Tertiary ── */
+.footer-family {
+  background: #ffffff; border-top: 1px solid rgba(34,32,45,0.08);
+  display: flex; justify-content: center; gap: 32px;
+  padding: 32px 144px; flex-wrap: wrap;
+}
+.footer-family a { font-size: 14px; color: var(--text-tertiary); text-decoration: none; transition: color 0.12s; white-space: nowrap; }
+.footer-family a:hover { color: var(--text-primary); }
+
+/* ── Mobile-only accordion section (hidden on desktop/medium) ── */
+.footer-mobile-section { display: none; border-top: 1px solid rgba(255,255,255,0.15); }
+.footer-accordion { border-bottom: 1px solid rgba(255,255,255,0.15); }
+.footer-accordion-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  color: var(--text-inverse-primary); text-align: left;
+}
+.footer-accordion-icon { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.2s; }
+.footer-accordion-icon.open { transform: rotate(180deg); }
+.footer-accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.footer-accordion-content.open { max-height: 600px; }
+.footer-accordion-links { list-style: none; padding: 0 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+.footer-accordion-links a { color: var(--text-inverse-secondary); text-decoration: none; font-size: 14px; line-height: 20px; }
+.footer-mobile-bottom {
+  padding: 32px 20px; display: flex; flex-direction: column; gap: 20px; align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.footer-mobile-legal { font-size: 14px; color: var(--text-inverse-secondary); text-align: center; line-height: 20px; }
+.footer-mobile-legal a { color: var(--text-inverse-primary); text-decoration: none; }
+
+/* ── Medium breakpoint (375px – 960px): tighten padding, let bottom wrap ── */
+@media (max-width: 960px) {
+  .footer-main { padding: 48px 40px 24px; gap: 24px; }
+  .footer-bottom { padding: 20px 40px; gap: 16px; }
+  .footer-family { padding: 24px 40px; gap: 20px; }
+}
+
+/* ── Small breakpoint (<375px): accordion replaces grid ── */
+@media (max-width: 375px) {
+  /* Hide desktop grid and horizontal bottom */
+  .footer-main { display: none; }
+  .footer-divider { display: none; }
+  .footer-bottom { display: none; }
+  /* Show mobile accordion section */
+  .footer-mobile-section { display: block; }
+  /* 2-col family bar */
+  .footer-family {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 16px 24px; padding: 24px 20px; text-align: center;
+  }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   30. ACCORDION
+   Source: preview/components6.html
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Border/Default #e7e4f1 → dividers
+     Body/Body Default Emphasis 14/20 → row title
+     Body/Body Default 14/20 → content
+   JS: toggleAccordion(btn) — see component-map.md
+═════════════════════════════════════════════════════════════════ */
+
+.accordion { border: 1px solid var(--border-default); border-radius: 16px; overflow: hidden; background: var(--fill-default); }
+.accordion-item { border-bottom: 1px solid var(--border-default); }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  color: var(--text-primary); text-align: left; transition: background 0.12s;
+}
+.accordion-btn:hover { background: var(--state-hover); }
+.accordion-icon { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.2s; }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.accordion-content.open { max-height: 600px; }
+.accordion-body { padding: 0 20px 20px; font-size: 14px; line-height: 20px; color: var(--text-secondary); }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   31. MODAL
+   Source: preview/components6.html
+   Figma: 1. Dialogs › Modal
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     Large=24 → card border-radius
+     drop-shadow-modal: 0 4px 16px rgba(34,32,45,0.45)
+     Common/Descriptor L Bold 20/24 → modal title
+     Palette/Purple/15 #E4E0FC → content placeholder bg
+   JS: openModal(id) / closeModal(id) — see component-map.md
+═════════════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(34,32,45,0.6);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+  background: var(--fill-default); border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(34,32,45,0.45);
+  display: flex; flex-direction: column;
+  max-height: 90vh; overflow: hidden; position: relative;
+  animation: modal-in 0.2s ease;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-narrow { width: 440px; }
+.modal-wide   { width: 720px; }
+.modal-mobile { width: min(335px, 100%); }
+
+.modal-header { position: relative; padding: 24px 24px 0; display: flex; flex-direction: column; align-items: center; }
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px; border-radius: 9999px;
+  background: var(--fill-emphasis-med); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s;
+}
+.modal-close:hover { background: var(--fill-cta-secondary); }
+.modal-close svg { width: 14px; height: 14px; color: var(--text-primary); }
+.modal-title { font-size: 20px; font-weight: 700; line-height: 24px; color: var(--text-primary); text-align: center; margin-top: 8px; }
+
+.modal-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+.modal-content-placeholder {
+  background: var(--palette-purple-15); border-radius: 12px; min-height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  color: var(--fill-brand); text-transform: uppercase;
+}
+
+.modal-footer { padding: 0 24px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   32. BOTTOM SHEET
+   Source: preview/components6.html
+   Figma: 1. Dialogs › Bottom Sheet
+   ─────────────────────────────────────────────────────────────
+   Tokens:
+     XLarge=36 → top border-radius only
+     drop-shadow-navigation-bottom: 0 -2px 16px rgba(34,32,45,0.12)
+   Uses same .modal-header / .modal-body / .modal-footer structure
+   JS: openModal(id) / closeModal(id) same as Modal
+═════════════════════════════════════════════════════════════════ */
+
+.sheet-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(34,32,45,0.6);
+  display: none; align-items: flex-end; justify-content: center;
+}
+.sheet-overlay.open { display: flex; }
+
+.sheet-card {
+  background: var(--fill-default); border-radius: 36px 36px 0 0;
+  box-shadow: 0 -2px 16px rgba(34,32,45,0.12);
+  width: 100%; max-width: 500px;
+  display: flex; flex-direction: column;
+  max-height: 90vh; overflow: hidden;
+  animation: sheet-in 0.25s ease;
+}
+.sheet-card.fullscreen { max-height: 95vh; }
+@keyframes sheet-in {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.sheet-handle {
+  width: 36px; height: 4px; border-radius: 9999px;
+  background: var(--border-default); margin: 12px auto 4px; flex-shrink: 0;
+}

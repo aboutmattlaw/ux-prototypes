@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Cards — Rakuten</title>
+  <link rel="stylesheet" href="./radiant-foundations.css">
+  <link rel="stylesheet" href="./radiant-components.css">
+  <style>
+    body { background: var(--fill-default); min-height: 100vh; font-family: 'Rakuten Sans UI', sans-serif; }
+
+    .hero {
+      background: var(--fill-cta-secondary);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 960px;
+      margin: 24px auto;
+      border-radius: 16px;
+    }
+    .hero-left h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .hero-left p  { font-size: 13px; color: var(--text-secondary); }
+    .hero-amount  { font-size: 36px; font-weight: 800; color: var(--fill-brand); }
+
+    .section { max-width: 960px; margin: 0 auto 40px; padding: 0 16px; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+
+    /* Boost carousel */
+    .boost-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .boost-card {
+      flex-shrink: 0;
+      width: 120px;
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--fill-default);
+      box-shadow: var(--shadow-default);
+      transition: transform 0.1s;
+    }
+    .boost-card:hover { transform: translateY(-2px); }
+    .boost-card-img {
+      width: 100%;
+      height: 72px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+    }
+    .boost-card-body { padding: 6px 8px 8px; }
+    .boost-card-name { font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+    .boost-card-price { font-size: 11px; color: var(--text-secondary); }
+    .boost-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: #e8f5e9; color: #2e7d32;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 6px; border-radius: 9999px;
+      margin-top: 3px;
+    }
+
+    /* Grid */
+    .gc-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .gc-tile {
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--fill-default);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .gc-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-default-hover); }
+    .gc-tile-img {
+      width: 100%;
+      height: 80px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .gc-tile-body { padding: 6px 8px 8px; }
+    .gc-tile-name  { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+    .gc-tile-price { font-size: 11px; color: var(--text-secondary); }
+
+    /* Apple tile highlight */
+    .gc-tile.apple { border: 2px solid var(--fill-brand); }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-primary">
+    <button class="header-hamburger-btn" aria-label="Open menu">
+      <svg viewBox="0 0 20 20" fill="none" width="22" height="22"><rect x="2" y="4.5" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="9" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="13.5" width="16" height="2" rx="1" fill="currentColor"/></svg>
+    </button>
+    <a class="header-logo" href="#"><img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten"></a>
+    <button class="header-nav-btn">Categories <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="header-search">
+      <input class="header-search-input" type="text" placeholder="Try searching for Expedia">
+      <button class="header-search-btn"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="white" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="header-actions">
+      <button class="header-action-btn">Rewards</button>
+      <button class="header-action-btn">Matt $41.85 ▾</button>
+    </div>
+  </div>
+  <nav class="header-subnav">
+    <a class="header-subnav-item" href="#">Earn Extra</a>
+    <a class="header-subnav-item" href="#">Hot Deals</a>
+    <a class="header-subnav-item" href="#">In-Store</a>
+    <a class="header-subnav-item" href="#">Travel</a>
+    <a class="header-subnav-item" href="#">Clothing</a>
+    <a class="header-subnav-item" href="#">Beauty</a>
+    <a class="header-subnav-item" href="#">Banking</a>
+    <a class="header-subnav-item" href="#">Home</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-left">
+    <h2>Ready to cash out?</h2>
+    <p>You'll get your confirmed Cash Back <strong>73 days sooner</strong> than the next payment!</p>
+  </div>
+  <div class="hero-amount">$17.61</div>
+</div>
+
+<!-- Boost section -->
+<div class="section">
+  <div class="section-title">Boost your gift card value</div>
+  <div class="boost-row">
+    <!-- Target -->
+    <div class="boost-card">
+      <div class="boost-card-img" style="background:#cc0000; color:white; font-size:18px; font-weight:900;">TARGET</div>
+      <div class="boost-card-body">
+        <div class="boost-card-name">Target</div>
+        <div class="boost-card-price">$18.53 <span style="text-decoration:line-through;color:var(--text-tertiary)">$17.61</span></div>
+        <div class="boost-badge">⚡ 5% Boost</div>
+      </div>
+    </div>
+    <!-- Apple -->
+    <div class="boost-card" onclick="window.location='address.html'" style="border:2px solid var(--fill-brand);">
+      <div class="boost-card-img" style="background:#f5f5f7;">
+        <svg viewBox="0 0 40 40" width="36" height="36"><path d="M28.5 21.2c0-3.5 2.9-5.2 3-5.3-1.6-2.4-4.2-2.7-5.1-2.7-2.2-.2-4.2 1.3-5.3 1.3-1.1 0-2.8-1.2-4.6-1.2-2.4 0-4.6 1.4-5.8 3.5-2.5 4.3-.6 10.7 1.7 14.2 1.2 1.7 2.5 3.6 4.3 3.5 1.7-.1 2.4-1.1 4.5-1.1 2.1 0 2.7 1.1 4.5 1.1 1.9 0 3.1-1.7 4.2-3.4 1.3-2 1.9-3.9 1.9-4-.1 0-4.3-1.7-4.3-5.9zM25 11.5c.9-1.1 1.6-2.7 1.4-4.3-1.4.1-3 .9-4 2.1-.9 1-1.7 2.6-1.5 4.2 1.6.1 3.2-.8 4.1-2z" fill="#1d1d1f"/></svg>
+      </div>
+      <div class="boost-card-body">
+        <div class="boost-card-name">Apple.com</div>
+        <div class="boost-card-price">$18.49 <span style="text-decoration:line-through;color:var(--text-tertiary)">$17.61</span></div>
+        <div class="boost-badge">⚡ 5% Boost</div>
+      </div>
+    </div>
+    <!-- Ulta -->
+    <div class="boost-card">
+      <div class="boost-card-img" style="background:#e05c00; color:white; font-size:13px; font-weight:900; letter-spacing:-0.5px;">ULTA BEAUTY</div>
+      <div class="boost-card-body">
+        <div class="boost-card-name">Ulta Beauty</div>
+        <div class="boost-card-price">$18.49 <span style="text-decoration:line-through;color:var(--text-tertiary)">$17.61</span></div>
+        <div class="boost-badge">⚡ 7% Boost</div>
+      </div>
+    </div>
+    <!-- DoorDash -->
+    <div class="boost-card">
+      <div class="boost-card-img" style="background:#ff3008; color:white; font-size:12px; font-weight:900;">DoorDash</div>
+      <div class="boost-card-body">
+        <div class="boost-card-name">DoorDash</div>
+        <div class="boost-card-price">$18.49</div>
+        <div class="boost-badge">⚡ 4% Boost</div>
+      </div>
+    </div>
+    <!-- Adidas -->
+    <div class="boost-card">
+      <div class="boost-card-img" style="background:#000; color:white; font-size:15px; font-weight:900; letter-spacing:1px;">adidas</div>
+      <div class="boost-card-body">
+        <div class="boost-card-name">adidas</div>
+        <div class="boost-card-price">$19.37 <span style="text-decoration:line-through;color:var(--text-tertiary)">$17.61</span></div>
+        <div class="boost-badge">⚡ 10% Boost</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- More gift cards grid -->
+<div class="section">
+  <div class="section-title">More gift cards to choose from</div>
+  <div class="gc-grid">
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#cc0000; color:white; font-weight:900; font-size:16px;">TARGET</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Target</div><div class="gc-tile-price">$18.53</div><div class="boost-badge" style="font-size:9px;">⚡ 5% Boost</div></div>
+    </div>
+
+    <div class="gc-tile apple" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#f5f5f7;">
+        <svg viewBox="0 0 40 40" width="32" height="32"><path d="M28.5 21.2c0-3.5 2.9-5.2 3-5.3-1.6-2.4-4.2-2.7-5.1-2.7-2.2-.2-4.2 1.3-5.3 1.3-1.1 0-2.8-1.2-4.6-1.2-2.4 0-4.6 1.4-5.8 3.5-2.5 4.3-.6 10.7 1.7 14.2 1.2 1.7 2.5 3.6 4.3 3.5 1.7-.1 2.4-1.1 4.5-1.1 2.1 0 2.7 1.1 4.5 1.1 1.9 0 3.1-1.7 4.2-3.4 1.3-2 1.9-3.9 1.9-4-.1 0-4.3-1.7-4.3-5.9zM25 11.5c.9-1.1 1.6-2.7 1.4-4.3-1.4.1-3 .9-4 2.1-.9 1-1.7 2.6-1.5 4.2 1.6.1 3.2-.8 4.1-2z" fill="#1d1d1f"/></svg>
+      </div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Apple.com</div><div class="gc-tile-price">$18.49</div><div class="boost-badge" style="font-size:9px;">⚡ 5% Boost</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#00704A; color:white; font-size:12px; font-weight:700;">Starbucks</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Starbucks</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#000; color:white; font-size:11px; font-weight:700;">Sephora</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Sephora</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#e05c00; color:white; font-size:11px; font-weight:900;">ULTA</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Ulta Beauty</div><div class="gc-tile-price">$19.04</div><div class="boost-badge" style="font-size:9px;">⚡ 8% Boost</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#ff3008; color:white; font-size:11px; font-weight:700;">DoorDash</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">DoorDash</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#e31c23; color:white; font-size:13px; font-weight:700;">Amazon</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Amazon</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#004990; color:white; font-size:11px; font-weight:700;">Sam's Club</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Sam's Club</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#fff; border-bottom:1px solid var(--border-default); color:#333; font-size:12px; font-weight:700;">Nordstrom</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Nordstrom</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#000; color:white; font-size:11px; font-weight:700;">Nordstrom Rack</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Nordstrom Rack</div><div class="gc-tile-price">$17.61</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#000; color:white; font-size:14px; font-weight:900; letter-spacing:1px;">adidas</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">adidas</div><div class="gc-tile-price">$19.37</div><div class="boost-badge" style="font-size:9px;">⚡ 10% Boost</div></div>
+    </div>
+
+    <div class="gc-tile" onclick="window.location='address.html'">
+      <div class="gc-tile-img" style="background:#e31c23; color:white; font-size:12px; font-weight:700;">Petco</div>
+      <div class="gc-tile-body"><div class="gc-tile-name">Petco</div><div class="gc-tile-price">$19.37</div><div class="boost-badge" style="font-size:9px;">⚡ 10% Boost</div></div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <span>© 2026 Ebates Performance Marketing Inc., d/b/a Rakuten Rewards</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 0);
+  });
+</script>
+</body>
+</html>

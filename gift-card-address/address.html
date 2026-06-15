@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Address — Rakuten</title>
+  <link rel="stylesheet" href="./radiant-foundations.css">
+  <link rel="stylesheet" href="./radiant-components.css">
+  <style>
+    body { background: var(--fill-default); min-height: 100vh; font-family: 'Rakuten Sans UI', sans-serif; overflow: hidden; }
+
+    /* ── Dimmed page behind modal ── */
+    .page-behind {
+      filter: blur(2px);
+      opacity: 0.45;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 24px 16px;
+    }
+
+    .modal {
+      background: var(--fill-default);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 16px 64px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--fill-light);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+    }
+    .modal-close:hover { background: var(--fill-emphasis-med); }
+
+    .modal-body { padding: 28px 28px 24px; }
+
+    /* Icon */
+    .modal-icon {
+      width: 48px; height: 48px;
+      background: var(--fill-cta-secondary);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+    .modal-sub   { font-size: 13px; color: var(--text-secondary); line-height: 19px; margin-bottom: 20px; }
+
+    /* Why we need this */
+    .why-box {
+      background: var(--fill-cta-secondary);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .why-box-icon { flex-shrink: 0; margin-top: 1px; }
+    .why-box-text { font-size: 12px; color: var(--text-brand); line-height: 17px; }
+    .why-box-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* Form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-row.thirds { grid-template-columns: 2fr 1fr 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.04em; }
+    .form-input {
+      height: 40px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      background: var(--fill-default);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--fill-brand); box-shadow: 0 0 0 3px var(--fill-cta-secondary); }
+    .form-select {
+      height: 40px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
+      padding: 0 32px 0 12px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      background: var(--fill-default);
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+
+    .divider { height: 1px; background: var(--border-default); margin: 16px 0; }
+
+    .section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+
+    .modal-footer {
+      padding: 0 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .legal {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-align: center;
+      line-height: 16px;
+    }
+    .legal a { color: var(--fill-brand); }
+
+    /* Page behind — simplified gift card index */
+    .hero {
+      background: var(--fill-cta-secondary);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 960px;
+      margin: 24px auto;
+      border-radius: 16px;
+    }
+    .hero h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .hero p  { font-size: 13px; color: var(--text-secondary); }
+    .hero-amount { font-size: 36px; font-weight: 800; color: var(--fill-brand); }
+
+    .section { max-width: 960px; margin: 0 auto 32px; padding: 0 16px; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; }
+    .gc-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .gc-tile {
+      border: 1px solid var(--border-default);
+      border-radius: 12px; overflow: hidden;
+      background: var(--fill-default);
+    }
+    .gc-tile-img { width: 100%; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .gc-tile-body { padding: 6px 8px 8px; }
+    .gc-tile-name { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+    .gc-tile-price { font-size: 11px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+<!-- ── Blurred page behind ── -->
+<div class="page-behind">
+  <header class="site-header">
+    <div class="header-primary">
+      <a class="header-logo" href="#"><img src="./logos/logotype/Purple-On-White.svg" alt="Rakuten"></a>
+      <div class="header-search"><input class="header-search-input" type="text" placeholder="Try searching for Expedia"><button class="header-search-btn"></button></div>
+      <div class="header-actions"><button class="header-action-btn">Matt $41.85 ▾</button></div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h2>Ready to cash out?</h2>
+      <p>You'll get your confirmed Cash Back <strong>73 days sooner</strong> than the next payment!</p>
+    </div>
+    <div class="hero-amount">$17.61</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">More gift cards to choose from</div>
+    <div class="gc-grid">
+      <div class="gc-tile"><div class="gc-tile-img" style="background:#cc0000;color:white;">TARGET</div><div class="gc-tile-body"><div class="gc-tile-name">Target</div><div class="gc-tile-price">$18.53</div></div></div>
+      <div class="gc-tile" style="border:2px solid var(--fill-brand)"><div class="gc-tile-img" style="background:#f5f5f7;"><svg viewBox="0 0 40 40" width="28" height="28"><path d="M28.5 21.2c0-3.5 2.9-5.2 3-5.3-1.6-2.4-4.2-2.7-5.1-2.7-2.2-.2-4.2 1.3-5.3 1.3-1.1 0-2.8-1.2-4.6-1.2-2.4 0-4.6 1.4-5.8 3.5-2.5 4.3-.6 10.7 1.7 14.2 1.2 1.7 2.5 3.6 4.3 3.5 1.7-.1 2.4-1.1 4.5-1.1 2.1 0 2.7 1.1 4.5 1.1 1.9 0 3.1-1.7 4.2-3.4 1.3-2 1.9-3.9 1.9-4-.1 0-4.3-1.7-4.3-5.9zM25 11.5c.9-1.1 1.6-2.7 1.4-4.3-1.4.1-3 .9-4 2.1-.9 1-1.7 2.6-1.5 4.2 1.6.1 3.2-.8 4.1-2z" fill="#1d1d1f"/></svg></div><div class="gc-tile-body"><div class="gc-tile-name">Apple.com</div><div class="gc-tile-price">$18.49</div></div></div>
+      <div class="gc-tile"><div class="gc-tile-img" style="background:#00704A;color:white;">Starbucks</div><div class="gc-tile-body"><div class="gc-tile-name">Starbucks</div><div class="gc-tile-price">$17.61</div></div></div>
+      <div class="gc-tile"><div class="gc-tile-img" style="background:#000;color:white;">Sephora</div><div class="gc-tile-body"><div class="gc-tile-name">Sephora</div><div class="gc-tile-price">$17.61</div></div></div>
+      <div class="gc-tile"><div class="gc-tile-img" style="background:#e05c00;color:white;">ULTA</div><div class="gc-tile-body"><div class="gc-tile-name">Ulta Beauty</div><div class="gc-tile-price">$19.04</div></div></div>
+      <div class="gc-tile"><div class="gc-tile-img" style="background:#e31c23;color:white;">Amazon</div><div class="gc-tile-body"><div class="gc-tile-name">Amazon</div><div class="gc-tile-price">$17.61</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal ── -->
+<div class="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="window.location='index.html'">
+      <svg viewBox="0 0 14 14" fill="none" width="12" height="12"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+
+    <div class="modal-body">
+
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--fill-brand)"/></svg>
+      </div>
+
+      <div class="modal-title">One quick step before we pay you</div>
+      <div class="modal-sub">We need a mailing address on file before we can send your Cash Back. We'll send a verification email to <strong>ma*****@rakuten.com</strong>.</div>
+
+      <!-- Why we need this -->
+      <div class="why-box">
+        <div class="why-box-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="10" cy="10" r="8" stroke="var(--fill-brand)" stroke-width="1.5"/><path d="M10 9v5M10 7v.5" stroke="var(--fill-brand)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="why-box-text">
+          <strong>Required to redeem gift cards</strong>
+          A mailing address is needed to send your gift card. Add it once and you're set for every redemption going forward.
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" value="Matt">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" value="Law">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Mailing Address</div>
+
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Street Address</label>
+          <input class="form-input" type="text" placeholder="Street address">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Address 2 <span style="font-weight:400;color:var(--text-tertiary)">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="Apt, suite, unit, etc.">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input class="form-input" type="text" placeholder="City">
+        </div>
+        <div class="form-group">
+          <label class="form-label">State</label>
+          <select class="form-select"><option>New York</option><option>California</option><option>Texas</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">ZIP Code</label>
+          <input class="form-input" type="text" placeholder="ZIP code">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <select class="form-select"><option>United States</option><option>Canada</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-lg" style="width:100%;" onclick="window.location='review.html'">Save &amp; Continue</button>
+      <div class="legal"><a href="#">APO or FPO information</a> &nbsp;·&nbsp; <a href="#">Privacy Policy</a></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

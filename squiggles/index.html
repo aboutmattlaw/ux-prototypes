@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Squiggles</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafaf8;
+      --surface: #fff;
+      --border: #e5e5e0;
+      --text: #1a1a1a;
+      --muted: #888;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-tabs { display: flex; gap: 4px; }
+    .tab {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .tab.active { background: var(--text); color: #fff; }
+    .tab:hover:not(.active) { background: #f0f0f0; color: var(--text); }
+
+    /* ── Views ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Setup ── */
+    .setup-wrap {
+      max-width: 440px;
+      margin: 56px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .setup-wrap h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    .setup-wrap .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+
+    .player-setup { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; text-align: left; }
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .player-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .player-row input[type="text"] {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      background: transparent;
+      color: var(--text);
+    }
+    .color-swatch {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    /* ── Game ── */
+    .game-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px 80px; }
+
+    .turn-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid transparent;
+    }
+    .turn-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .turn-label { flex: 1; }
+    .turn-phase {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .canvas-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    canvas { display: block; width: 100%; cursor: crosshair; touch-action: none; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 12px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .tool-group { display: flex; align-items: center; gap: 5px; }
+    .tool-sep { width: 1px; height: 22px; background: var(--border); margin: 0 3px; }
+
+    .tool-btn {
+      padding: 5px 9px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .tool-btn:hover  { background: #f5f5f5; }
+    .tool-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+    .size-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .size-btn.active { border-color: var(--text); background: var(--text); }
+    .size-dot { border-radius: 50%; background: var(--text); pointer-events: none; }
+    .size-btn.active .size-dot { background: #fff; }
+
+    .undo-btn {
+      margin-left: auto;
+      padding: 5px 11px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: inherit;
+    }
+    .undo-btn:hover { color: var(--text); }
+
+    .action-row { display: flex; gap: 8px; margin-top: 4px; }
+    .btn-done {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--text);
+      color: #fff;
+      font-family: inherit;
+    }
+    .btn-done:hover { opacity: 0.85; }
+    .btn-secondary {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: inherit;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: #aaa; }
+
+    /* Share panel */
+    .share-panel {
+      display: none;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .share-panel.visible { display: block; }
+    .share-panel h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .share-panel p  { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+    .share-url-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #f5f5f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .share-url-text {
+      flex: 1;
+      font-size: 12px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: monospace;
+    }
+    .btn-copy {
+      padding: 6px 14px;
+      border-radius: 7px;
+      border: none;
+      background: var(--text);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .btn-copy:hover { opacity: 0.85; }
+    .share-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .share-divider::before, .share-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .share-new-squiggle {
+      margin-top: 4px;
+    }
+    .share-new-squiggle h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .share-new-squiggle p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    /* Completed view */
+    .completed-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .completed-card canvas { display: block; width: 100%; }
+    .completed-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .completed-label { font-weight: 700; color: var(--text); }
+
+    /* ── Archive ── */
+    .archive-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px 80px; }
+    .archive-wrap h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .archive-empty { color: var(--muted); font-size: 14px; padding: 48px 0; text-align: center; }
+    .archive-grid { display: flex; flex-direction: column; gap: 16px; }
+    .archive-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .archive-item img { width: 100%; display: block; }
+    .archive-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .archive-round {
+      font-weight: 700;
+      font-size: 11px;
+      background: #f0f0f0;
+      border-radius: 9999px;
+      padding: 2px 9px;
+      color: var(--text);
+    }
+    .archive-dots { display: flex; gap: 4px; }
+    .archive-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .archive-save {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .archive-save:hover { color: var(--text); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--text);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform 0.25s ease;
+      z-index: 100;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">〰️ Squiggles</div>
+  <div class="header-tabs">
+    <button class="tab active" id="tab-game" onclick="showTab('game')">Game</button>
+    <button class="tab" id="tab-archive" onclick="showTab('archive')">Archive</button>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="view active" id="view-setup">
+  <div class="setup-wrap">
+    <h2>Let's play Squiggles ✏️</h2>
+    <p class="sub">One player draws a squiggle and shares a link. The other player completes it — then draws a new squiggle back.</p>
+    <div class="player-setup">
+      <div class="player-row">
+        <div class="player-dot" id="dot1" style="background:#e03c6e"></div>
+        <input type="text" id="p1-name" value="Player 1" maxlength="20">
+        <input type="color" id="p1-color" value="#e03c6e" class="color-swatch">
+      </div>
+      <div class="player-row">
+        <div class="player-dot" id="dot2" style="background:#3b82f6"></div>
+        <input type="text" id="p2-name" value="Player 2" maxlength="20">
+        <input type="color" id="p2-color" value="#3b82f6" class="color-swatch">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startGame()">Start Drawing →</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="view" id="view-game">
+  <div class="game-wrap">
+
+    <div class="turn-banner" id="turn-banner">
+      <div class="turn-dot" id="turn-dot"></div>
+      <div class="turn-label" id="turn-label"></div>
+      <div class="turn-phase" id="turn-phase"></div>
+    </div>
+
+    <div class="canvas-card">
+      <canvas id="canvas" height="460"></canvas>
+      <div class="toolbar">
+        <div class="tool-group">
+          <button class="tool-btn active" id="tool-pen" onclick="setTool('pen')">✏️ Pen</button>
+          <button class="tool-btn" id="tool-eraser" onclick="setTool('eraser')">◻️ Eraser</button>
+        </div>
+        <div class="tool-sep"></div>
+        <div class="tool-group">
+          <button class="size-btn active" onclick="setSize(0)"><div class="size-dot" style="width:4px;height:4px"></div></button>
+          <button class="size-btn" onclick="setSize(1)"><div class="size-dot" style="width:7px;height:7px"></div></button>
+          <button class="size-btn" onclick="setSize(2)"><div class="size-dot" style="width:12px;height:12px"></div></button>
+        </div>
+        <button class="undo-btn" onclick="undo()">↩ Undo</button>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-secondary" onclick="clearMine()">Clear mine</button>
+      <button class="btn-done" id="btn-done" onclick="doneTurn()">Done →</button>
+    </div>
+
+    <!-- Share panel (shown after Done) -->
+    <div class="share-panel" id="share-panel">
+      <h3 id="share-title"></h3>
+      <p id="share-desc"></p>
+
+      <!-- Step 1: draw new squiggle (only shown after completing a drawing) -->
+      <div id="new-squiggle-prompt" style="display:none">
+        <button class="btn-primary" style="width:100%;margin-bottom:0" onclick="startNewSquiggle()">✏️ Draw your squiggle for the next round</button>
+      </div>
+
+      <!-- Step 2: done with new squiggle — generate combined link -->
+      <div id="new-squiggle-done-row" style="display:none">
+        <div class="action-row" style="margin-bottom:12px">
+          <button class="btn-secondary" onclick="clearNewSquiggle()">Clear</button>
+          <button class="btn-done" onclick="finishNewSquiggle()">Done with squiggle →</button>
+        </div>
+      </div>
+
+      <!-- Final link (one URL containing both completed drawing + new squiggle) -->
+      <div id="share-link-row" style="display:none">
+        <div class="share-url-row">
+          <span class="share-url-text" id="share-url-text"></span>
+          <button class="btn-copy" onclick="copyLink()">Copy link</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ARCHIVE -->
+<div class="view" id="view-archive">
+  <div class="archive-wrap">
+    <h2>Archive</h2>
+    <div id="archive-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── State ──
+  const G = {
+    p: [
+      { name: 'Player 1', color: '#e03c6e' },
+      { name: 'Player 2', color: '#3b82f6' },
+    ],
+    turn: 0,        // who is currently drawing (0 or 1)
+    phase: 'squiggle', // 'squiggle' | 'complete'
+    round: 1,
+    strokes: [],    // all strokes
+    currentStroke: null,
+    shareURL: '',
+  };
+  const SIZES = [3, 6, 13];
+  let tool = 'pen', sizeIdx = 0, drawing = false;
+  let archive = JSON.parse(localStorage.getItem('squiggles-archive') || '[]');
+
+  const canvas = document.getElementById('canvas');
+  const ctx    = canvas.getContext('2d');
+
+  // ── Setup color pickers ──
+  ['1','2'].forEach(n => {
+    document.getElementById('p'+n+'-color').addEventListener('input', e => {
+      document.getElementById('dot'+n).style.background = e.target.value;
+    });
+  });
+
+  // ── Resize canvas ──
+  function initCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const w   = canvas.offsetWidth;
+    canvas.width  = w * dpr;
+    canvas.height = 460 * dpr;
+    ctx.scale(dpr, dpr);
+    redraw();
+  }
+  window.addEventListener('resize', () => {
+    const dpr = window.devicePixelRatio || 1;
+    const w   = canvas.offsetWidth;
+    if (Math.abs(canvas.width - w * dpr) > 2) {
+      canvas.width  = w * dpr;
+      canvas.height = 460 * dpr;
+      ctx.scale(dpr, dpr);
+      redraw();
+    }
+  });
+
+  // ── View / tab ──
+  function showTab(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+    if (name === 'game') {
+      const hasStarted = G.strokes.length > 0 || G.shareURL;
+      document.getElementById(hasStarted ? 'view-game' : 'view-setup').classList.add('active');
+    } else {
+      document.getElementById('view-archive').classList.add('active');
+      renderArchive();
+    }
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  // ── Start game ──
+  function startGame() {
+    G.p[0].name  = document.getElementById('p1-name').value.trim() || 'Player 1';
+    G.p[0].color = document.getElementById('p1-color').value;
+    G.p[1].name  = document.getElementById('p2-name').value.trim() || 'Player 2';
+    G.p[1].color = document.getElementById('p2-color').value;
+    G.turn = 0;
+    G.phase = 'squiggle';
+    G.round = 1;
+    G.strokes = [];
+    G.shareURL = '';
+
+    document.getElementById('view-setup').classList.remove('active');
+    document.getElementById('view-game').classList.add('active');
+    document.getElementById('share-panel').classList.remove('visible');
+
+    setTimeout(() => { initCanvas(); updateUI(); }, 30);
+  }
+
+  // ── Load state from URL hash ──
+  function loadFromHash() {
+    const hash = location.hash.slice(1);
+    if (!hash) return false;
+    try {
+      const data = JSON.parse(decodeURIComponent(atob(hash)));
+      G.p[0] = data.p[0];
+      G.p[1] = data.p[1];
+      G.turn = data.turn;
+      G.phase = data.phase;
+      G.round = data.round || 1;
+      G.strokes = decodeStrokes(data.strokes);
+      G.shareURL = '';
+
+      document.getElementById('view-setup').classList.remove('active');
+      document.getElementById('view-game').classList.add('active');
+      document.getElementById('share-panel').classList.remove('visible');
+
+      // if link includes a completed drawing, show it first before the canvas
+      if (data.completed) {
+        saveToArchive(data.completed);
+        showCompletedReveal(data.completed, data.p);
+      }
+
+      setTimeout(() => { initCanvas(); updateUI(); }, 30);
+      history.replaceState(null, '', location.pathname);
+      return true;
+    } catch(e) {
+      console.warn('Could not load from URL', e);
+      return false;
+    }
+  }
+
+  // ── Show completed drawing reveal before letting player draw ──
+  function showCompletedReveal(completed, players) {
+    const reveal = document.createElement('div');
+    reveal.id = 'completed-reveal';
+    reveal.style.cssText = `
+      position:fixed;inset:0;background:rgba(0,0,0,0.7);
+      z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;
+    `;
+    reveal.innerHTML = `
+      <div style="background:#fff;border-radius:16px;overflow:hidden;max-width:560px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.3)">
+        <img src="${completed.dataURL}" style="width:100%;display:block">
+        <div style="padding:16px 20px;display:flex;align-items:center;gap:12px;border-top:1px solid #e5e5e0">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#1a1a1a">Round ${completed.round} — complete!</div>
+            <div style="font-size:12px;color:#888;margin-top:2px">${players[0].name} <span style="color:${players[0].color}">●</span> &amp; ${players[1].name} <span style="color:${players[1].color}">●</span></div>
+          </div>
+          <button onclick="document.getElementById('completed-reveal').remove()" style="margin-left:auto;padding:9px 20px;background:#1a1a1a;color:#fff;border:none;border-radius:9999px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+            Now complete mine →
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(reveal);
+  }
+
+  // ── UI ──
+  function updateUI() {
+    const cp    = G.p[G.turn];
+    const other = G.p[1 - G.turn];
+    const banner = document.getElementById('turn-banner');
+    banner.style.borderColor = cp.color + '55';
+    banner.style.background  = cp.color + '11';
+    document.getElementById('turn-dot').style.background = cp.color;
+    document.getElementById('turn-label').textContent =
+      G.phase === 'squiggle'
+        ? `${cp.name} — draw a squiggle for ${other.name}`
+        : `${cp.name} — complete ${other.name}'s squiggle`;
+    document.getElementById('turn-phase').textContent =
+      G.phase === 'squiggle' ? 'New Squiggle' : 'Complete It';
+    document.getElementById('btn-done').textContent = 'Done →';
+  }
+
+  // ── Drawing ──
+  function setTool(t) {
+    tool = t;
+    document.getElementById('tool-pen').classList.toggle('active', t === 'pen');
+    document.getElementById('tool-eraser').classList.toggle('active', t === 'eraser');
+  }
+  function setSize(i) {
+    sizeIdx = i;
+    document.querySelectorAll('.size-btn').forEach((b,j) => b.classList.toggle('active', i===j));
+  }
+
+  function pos(e) {
+    const r   = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    const dpr = window.devicePixelRatio || 1;
+    return {
+      x: Math.round((src.clientX - r.left) * canvas.width  / r.width  / dpr),
+      y: Math.round((src.clientY - r.top)  * canvas.height / r.height / dpr),
+    };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    drawing = true;
+    const p = pos(e);
+    G.currentStroke = { player: G.turn, color: tool==='eraser'?null:G.p[G.turn].color, size: SIZES[sizeIdx], eraser: tool==='eraser', pts: [p.x, p.y] };
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  });
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const p = pos(e);
+    G.currentStroke.pts.push(p.x, p.y);
+    drawSegment(p, G.currentStroke);
+  });
+  canvas.addEventListener('mouseup',    endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; const p=pos(e); G.currentStroke={player:G.turn,color:tool==='eraser'?null:G.p[G.turn].color,size:SIZES[sizeIdx],eraser:tool==='eraser',pts:[p.x,p.y]}; ctx.beginPath(); ctx.moveTo(p.x,p.y); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { if(!drawing)return; e.preventDefault(); const p=pos(e); G.currentStroke.pts.push(p.x,p.y); drawSegment(p,G.currentStroke); }, {passive:false});
+  canvas.addEventListener('touchend',   endDraw);
+
+  function drawSegment(p, stroke) {
+    ctx.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over';
+    ctx.lineWidth   = stroke.size;
+    ctx.strokeStyle = stroke.color || 'rgba(0,0,0,1)';
+    ctx.lineCap = ctx.lineJoin = 'round';
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+
+  function endDraw() {
+    if (!drawing) return;
+    drawing = false;
+    ctx.globalCompositeOperation = 'source-over';
+    if (G.currentStroke && G.currentStroke.pts.length >= 4) {
+      G.strokes.push(G.currentStroke);
+    }
+    G.currentStroke = null;
+  }
+
+  function redraw() {
+    const dpr = window.devicePixelRatio || 1;
+    ctx.clearRect(0, 0, canvas.width/dpr, canvas.height/dpr);
+    for (const s of G.strokes) drawStroke(s);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  function drawStroke(s) {
+    if (s.pts.length < 4) return;
+    ctx.beginPath();
+    ctx.moveTo(s.pts[0], s.pts[1]);
+    for (let i = 2; i < s.pts.length; i += 2) ctx.lineTo(s.pts[i], s.pts[i+1]);
+    ctx.globalCompositeOperation = s.eraser ? 'destination-out' : 'source-over';
+    ctx.lineWidth   = s.size;
+    ctx.strokeStyle = s.color || 'rgba(0,0,0,1)';
+    ctx.lineCap = ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  function undo() {
+    for (let i = G.strokes.length - 1; i >= 0; i--) {
+      if (G.strokes[i].player === G.turn) { G.strokes.splice(i, 1); redraw(); return; }
+    }
+  }
+
+  function clearMine() {
+    G.strokes = G.strokes.filter(s => s.player !== G.turn);
+    redraw();
+  }
+
+  // ── Done — lock canvas, show next step ──
+  function doneTurn() {
+    const other = G.p[1 - G.turn];
+    const isComplete = G.phase === 'complete';
+
+    // lock canvas
+    canvas.style.cursor = 'default';
+    canvas.style.pointerEvents = 'none';
+    document.getElementById('btn-done').disabled = true;
+    document.getElementById('btn-done').style.opacity = '0.4';
+
+    if (isComplete) {
+      // snapshot and archive the completed drawing
+      const off = document.createElement('canvas');
+      off.width = canvas.width; off.height = canvas.height;
+      const oc = off.getContext('2d');
+      oc.fillStyle = '#fff';
+      oc.fillRect(0, 0, off.width, off.height);
+      oc.drawImage(canvas, 0, 0);
+      G.completedDataURL = off.toDataURL('image/png');
+      saveToArchive({ dataURL: G.completedDataURL, round: G.round, p: [G.p[0], G.p[1]] });
+
+      // show panel — ask them to draw a new squiggle before generating the link
+      document.getElementById('share-panel').classList.add('visible');
+      document.getElementById('share-title').textContent = '🎉 Drawing complete!';
+      document.getElementById('share-desc').textContent =
+        `Saved to your archive. Now draw a squiggle for ${other.name} — once you're done, you'll get one link that shows them the finished drawing AND kicks off the next round.`;
+      document.getElementById('new-squiggle-prompt').style.display = 'block';
+      document.getElementById('new-squiggle-done-row').style.display = 'none';
+      document.getElementById('share-link-row').style.display = 'none';
+
+    } else {
+      // just drew squiggle — generate link immediately
+      const payload = {
+        p: G.p,
+        turn: 1 - G.turn,
+        phase: 'complete',
+        round: G.round,
+        strokes: encodeStrokes(G.strokes),
+        completed: null,
+      };
+      G.shareURL = buildURL(payload);
+      document.getElementById('share-panel').classList.add('visible');
+      document.getElementById('share-title').textContent = `Send to ${other.name}`;
+      document.getElementById('share-desc').textContent =
+        `Your squiggle is ready! Send this link to ${other.name} — they'll complete it and send the next one back.`;
+      document.getElementById('new-squiggle-prompt').style.display = 'none';
+      document.getElementById('new-squiggle-done-row').style.display = 'none';
+      document.getElementById('share-link-row').style.display = 'block';
+      document.getElementById('share-url-text').textContent = G.shareURL;
+    }
+  }
+
+  // ── Player 2 starts drawing new squiggle after completing ──
+  function startNewSquiggle() {
+    // clear canvas for fresh squiggle, keep completed strokes in G.completedStrokes
+    G.completedStrokes = G.strokes.slice();
+    G.strokes = [];
+    G.turn = 1 - G.turn; // now drawing as the other player
+    G.phase = 'squiggle';
+    redraw();
+
+    canvas.style.cursor = 'crosshair';
+    canvas.style.pointerEvents = '';
+    updateUI();
+
+    document.getElementById('new-squiggle-prompt').style.display = 'none';
+    document.getElementById('new-squiggle-done-row').style.display = 'block';
+    document.getElementById('share-link-row').style.display = 'none';
+    document.getElementById('share-desc').textContent =
+      `Draw your squiggle, then hit Done to generate the link.`;
+  }
+
+  function clearNewSquiggle() {
+    G.strokes = G.strokes.filter(s => s.player !== G.turn);
+    redraw();
+  }
+
+  function finishNewSquiggle() {
+    const other = G.p[1 - G.turn];
+
+    // bundle: completed drawing + new squiggle strokes, turn passes back
+    const payload = {
+      p: G.p,
+      turn: 1 - G.turn,
+      phase: 'complete',
+      round: G.round + 1,
+      strokes: encodeStrokes(G.strokes),
+      completed: { dataURL: G.completedDataURL, round: G.round - 1, p: [G.p[0], G.p[1]] },
+    };
+    G.shareURL = buildURL(payload);
+
+    canvas.style.cursor = 'default';
+    canvas.style.pointerEvents = 'none';
+
+    document.getElementById('share-title').textContent = `Send to ${other.name}`;
+    document.getElementById('share-desc').textContent =
+      `One link — ${other.name} will see the finished drawing and then complete your new squiggle.`;
+    document.getElementById('new-squiggle-done-row').style.display = 'none';
+    document.getElementById('share-link-row').style.display = 'block';
+    document.getElementById('share-url-text').textContent = G.shareURL;
+
+    toast(`Ready to send to ${other.name}! 🎉`);
+  }
+
+  function buildURL(payload) {
+    return location.href.split('#')[0] + '#' + btoa(encodeURIComponent(JSON.stringify(payload)));
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText(G.shareURL).then(() => toast('Link copied! 📋'));
+  }
+
+  // ── Encode / decode strokes for URL ──
+  // Downsample points to every 3rd to keep URL small
+  function encodeStrokes(strokes) {
+    return strokes.map(s => ({
+      pl: s.player,
+      c:  s.color,
+      sz: s.size,
+      e:  s.eraser ? 1 : 0,
+      pts: downsample(s.pts, 3),
+    }));
+  }
+
+  function decodeStrokes(encoded) {
+    return (encoded || []).map(s => ({
+      player: s.pl,
+      color:  s.c,
+      size:   s.sz,
+      eraser: !!s.e,
+      pts:    s.pts,
+    }));
+  }
+
+  function downsample(pts, step) {
+    const out = [];
+    for (let i = 0; i < pts.length - 2; i += step * 2) {
+      out.push(pts[i], pts[i+1]);
+    }
+    // always include last point
+    out.push(pts[pts.length-2], pts[pts.length-1]);
+    return out;
+  }
+
+  // ── Archive ──
+  function saveToArchive(item) {
+    archive.unshift(item);
+    if (archive.length > 50) archive = archive.slice(0, 50);
+    localStorage.setItem('squiggles-archive', JSON.stringify(archive));
+  }
+
+  function renderArchive() {
+    const list = document.getElementById('archive-list');
+    if (!archive.length) {
+      list.innerHTML = '<div class="archive-empty">No completed drawings yet — finish a round to see them here.</div>';
+      return;
+    }
+    list.innerHTML = archive.map((item, i) => `
+      <div class="archive-item">
+        <img src="${item.dataURL}" alt="Round ${item.round}">
+        <div class="archive-meta">
+          <span class="archive-round">Round ${item.round}</span>
+          <div class="archive-dots">
+            <div class="archive-dot" style="background:${item.p[0].color}" title="${item.p[0].name}"></div>
+            <div class="archive-dot" style="background:${item.p[1].color}" title="${item.p[1].name}"></div>
+          </div>
+          <span>${item.p[0].name} &amp; ${item.p[1].name}</span>
+          <button class="archive-save" onclick="downloadArchive(${i})">⬇ Save</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function downloadArchive(i) {
+    const a = document.createElement('a');
+    a.href = archive[i].dataURL;
+    a.download = `squiggles-round-${archive[i].round}.png`;
+    a.click();
+  }
+
+  // ── Toast ──
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ── Init ──
+  if (!loadFromHash()) {
+    // show setup
+  }
+  renderArchive();
+</script>
+</body>
+</html>
