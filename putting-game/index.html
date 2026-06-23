@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Putting Game</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a472a;
+      min-height: 100dvh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 32px;
+      color: #fff;
+    }
+
+    /* ── Header ── */
+    h1 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a7d9a0;
+      margin-bottom: 20px;
+    }
+
+    /* ── Setup screen ── */
+    #setup {
+      width: 100%;
+      max-width: 380px;
+    }
+    .setup-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 24px 20px;
+      margin-bottom: 12px;
+    }
+    .setup-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a7d9a0;
+      margin-bottom: 8px;
+    }
+    .setup-input {
+      width: 100%;
+      height: 48px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+    }
+    .setup-input::placeholder { color: rgba(255,255,255,0.35); font-weight: 400; }
+    .setup-input:focus { border-color: #a7d9a0; }
+    .start-btn {
+      width: 100%;
+      height: 56px;
+      background: #2d8a4e;
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+    .start-btn:hover { background: #34a05b; }
+    .start-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.35); cursor: default; }
+
+    /* ── Game screen ── */
+    #game { display: none; width: 100%; max-width: 420px; }
+
+    /* Scoreboard */
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .player-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 16px 14px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .player-card.active {
+      background: rgba(255,255,255,0.16);
+      border-color: #a7d9a0;
+    }
+    .player-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .player-card.active .player-name { color: #a7d9a0; }
+    .player-score {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      letter-spacing: -2px;
+    }
+    .player-needed {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 4px;
+    }
+    .player-card.active .player-needed { color: rgba(255,255,255,0.65); }
+
+    /* Turn indicator */
+    .turn-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #a7d9a0;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .turn-name {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: none;
+      letter-spacing: 0;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Progress bars */
+    .progress-wrap {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .progress-pname {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      width: 60px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .progress-bar-track {
+      flex: 1;
+      height: 10px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #2d8a4e;
+      border-radius: 9999px;
+      transition: width 0.3s ease;
+    }
+    .progress-row.active-row .progress-bar-fill { background: #a7d9a0; }
+    .progress-pts {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Scoring buttons */
+    .score-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .score-btn {
+      height: 72px;
+      border-radius: 14px;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.1s, transform 0.1s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .score-btn:active { transform: scale(0.94); }
+    .score-btn.bust-would { background: rgba(220,50,50,0.25); color: rgba(255,255,255,0.4); }
+    .score-btn .dot-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .miss-btn {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: 20px;
+      transition: background 0.1s;
+    }
+    .miss-btn:hover { background: rgba(255,255,255,0.06); }
+
+    /* Undo */
+    .undo-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: block;
+      margin: 0 auto 16px;
+      padding: 4px 12px;
+    }
+    .undo-btn:hover { color: rgba(255,255,255,0.6); }
+
+    /* Flash feedback */
+    .flash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 99;
+    }
+    .flash-pill {
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .flash-pill.show { opacity: 1; transform: scale(1); }
+
+    /* Win screen */
+    #win {
+      display: none;
+      text-align: center;
+      width: 100%;
+      max-width: 380px;
+    }
+    .win-emoji { font-size: 72px; margin-bottom: 16px; }
+    .win-name { font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .win-sub { font-size: 16px; color: #a7d9a0; margin-bottom: 32px; }
+    .play-again-btn {
+      width: 100%;
+      height: 56px;
+      background: #2d8a4e;
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .play-again-btn:hover { background: #34a05b; }
+  </style>
+</head>
+<body>
+
+<h1>⛳ Putting Game</h1>
+
+<!-- Setup -->
+<div id="setup">
+  <div class="setup-card">
+    <div class="setup-label">Player 1</div>
+    <input class="setup-input" id="p1-input" type="text" placeholder="Enter name" maxlength="16">
+  </div>
+  <div class="setup-card">
+    <div class="setup-label">Player 2</div>
+    <input class="setup-input" id="p2-input" type="text" placeholder="Enter name" maxlength="16">
+  </div>
+  <button class="start-btn" id="start-btn" onclick="startGame()" disabled>Start Game</button>
+</div>
+
+<!-- Game -->
+<div id="game">
+  <div class="scoreboard">
+    <div class="player-card active" id="card-0">
+      <div class="player-name" id="name-0">Player 1</div>
+      <div class="player-score" id="score-0">0</div>
+      <div class="player-needed" id="needed-0">needs 50</div>
+    </div>
+    <div class="player-card" id="card-1">
+      <div class="player-name" id="name-1">Player 2</div>
+      <div class="player-score" id="score-1">0</div>
+      <div class="player-needed" id="needed-1">needs 50</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row active-row" id="prog-row-0">
+      <div class="progress-pname" id="prog-name-0">P1</div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="prog-0" style="width:0%"></div></div>
+      <div class="progress-pts" id="prog-pts-0">0</div>
+    </div>
+    <div class="progress-row" id="prog-row-1">
+      <div class="progress-pname" id="prog-name-1">P2</div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="prog-1" style="width:0%"></div></div>
+      <div class="progress-pts" id="prog-pts-1">0</div>
+    </div>
+  </div>
+
+  <div class="turn-label">
+    Now putting
+    <span class="turn-name" id="turn-name">—</span>
+  </div>
+
+  <div class="score-section-label">Tap your spot</div>
+  <div class="score-grid">
+    <button class="score-btn" id="btn-2" onclick="addScore(2)">
+      2<div class="dot-label">dot</div>
+    </button>
+    <button class="score-btn" id="btn-4" onclick="addScore(4)">
+      4<div class="dot-label">dot</div>
+    </button>
+    <button class="score-btn" id="btn-6" onclick="addScore(6)">
+      6<div class="dot-label">dot</div>
+    </button>
+    <button class="score-btn" id="btn-8" onclick="addScore(8)">
+      8<div class="dot-label">dot</div>
+    </button>
+  </div>
+
+  <button class="miss-btn" onclick="addScore(0)">Miss — 0 pts</button>
+  <button class="undo-btn" id="undo-btn" onclick="undo()">↩ Undo last shot</button>
+</div>
+
+<!-- Win -->
+<div id="win">
+  <div class="win-emoji">🏆</div>
+  <div class="win-name" id="win-name"></div>
+  <div class="win-sub">reached exactly 50!</div>
+  <button class="play-again-btn" onclick="resetGame()">Play Again</button>
+</div>
+
+<!-- Flash -->
+<div class="flash" id="flash"><div class="flash-pill" id="flash-pill"></div></div>
+
+<script>
+  const DOTS = [2, 4, 6, 8];
+  const TARGET = 50;
+
+  let players = ['', ''];
+  let scores = [0, 0];
+  let turn = 0; // 0 or 1
+  let history = []; // {player, points, prevScore}
+
+  // ── Setup ──
+  const p1 = document.getElementById('p1-input');
+  const p2 = document.getElementById('p2-input');
+  const startBtn = document.getElementById('start-btn');
+  function checkStart() {
+    startBtn.disabled = !(p1.value.trim() && p2.value.trim());
+  }
+  p1.addEventListener('input', checkStart);
+  p2.addEventListener('input', checkStart);
+  p1.addEventListener('keydown', e => { if (e.key === 'Enter') p2.focus(); });
+  p2.addEventListener('keydown', e => { if (e.key === 'Enter' && !startBtn.disabled) startGame(); });
+
+  function startGame() {
+    players[0] = p1.value.trim() || 'Player 1';
+    players[1] = p2.value.trim() || 'Player 2';
+    scores = [0, 0];
+    turn = 0;
+    history = [];
+    document.getElementById('setup').style.display = 'none';
+    document.getElementById('win').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    render();
+  }
+
+  // ── Scoring ──
+  function addScore(pts) {
+    const current = scores[turn];
+    const next = current + pts;
+    if (pts > 0 && next > TARGET) {
+      showFlash('Bust! Shot doesn\'t count');
+      return;
+    }
+    history.push({ player: turn, points: pts, prevScore: current });
+    scores[turn] = next;
+    if (next === TARGET) {
+      render();
+      setTimeout(() => showWin(turn), 300);
+      return;
+    }
+    turn = 1 - turn;
+    render();
+    if (pts > 0) showFlash('+' + pts);
+  }
+
+  function undo() {
+    if (!history.length) return;
+    const last = history.pop();
+    scores[last.player] = last.prevScore;
+    turn = last.player;
+    render();
+  }
+
+  // ── Render ──
+  function render() {
+    for (let i = 0; i < 2; i++) {
+      document.getElementById('name-' + i).textContent = players[i];
+      document.getElementById('score-' + i).textContent = scores[i];
+      document.getElementById('needed-' + i).textContent = 'needs ' + (TARGET - scores[i]);
+      document.getElementById('card-' + i).classList.toggle('active', i === turn);
+      document.getElementById('prog-row-' + i).classList.toggle('active-row', i === turn);
+      const pct = Math.min(100, (scores[i] / TARGET) * 100);
+      document.getElementById('prog-' + i).style.width = pct + '%';
+      document.getElementById('prog-name-' + i).textContent = players[i];
+      document.getElementById('prog-pts-' + i).textContent = scores[i];
+    }
+    document.getElementById('turn-name').textContent = players[turn];
+
+    // Grey out buttons that would bust
+    DOTS.forEach(d => {
+      const btn = document.getElementById('btn-' + d);
+      const wouldBust = scores[turn] + d > TARGET;
+      btn.classList.toggle('bust-would', wouldBust);
+    });
+
+    document.getElementById('undo-btn').style.opacity = history.length ? '1' : '0.3';
+  }
+
+  // ── Win ──
+  function showWin(player) {
+    document.getElementById('game').style.display = 'none';
+    document.getElementById('win-name').textContent = players[player];
+    document.getElementById('win').style.display = 'block';
+  }
+
+  function resetGame() {
+    scores = [0, 0];
+    turn = 0;
+    history = [];
+    document.getElementById('win').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    render();
+  }
+
+  // ── Flash ──
+  let flashTimer;
+  function showFlash(msg) {
+    const pill = document.getElementById('flash-pill');
+    pill.textContent = msg;
+    pill.classList.add('show');
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(() => pill.classList.remove('show'), 900);
+  }
+</script>
+</body>
+</html>
