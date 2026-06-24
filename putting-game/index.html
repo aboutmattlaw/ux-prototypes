@@ -449,7 +449,7 @@
 <div id="win">
   <div class="win-emoji" id="win-emoji">🏆</div>
   <div class="win-name" id="win-name"></div>
-  <div class="win-sub" id="win-sub">reached exactly 24!</div>
+  <div class="win-sub" id="win-sub">reached exactly 26!</div>
   <div class="scorecard" id="scorecard"></div>
   <button class="play-again-btn" onclick="resetGame()">Play Again</button>
 </div>
@@ -459,7 +459,7 @@
 
 <script>
   const DOTS = [2, 4, 6, 8];
-  const TARGET = 24;
+  const TARGET = 26;
 
   let players = ['', ''];
   let scores = [0, 0];
@@ -581,7 +581,7 @@
     document.getElementById('game').style.display = 'none';
     document.getElementById('win-emoji').textContent = '🏆';
     document.getElementById('win-name').textContent = players[player];
-    document.getElementById('win-sub').textContent = 'reached exactly 24!';
+    document.getElementById('win-sub').textContent = 'reached exactly 26!';
     buildScorecard();
     document.getElementById('win').style.display = 'block';
   }
@@ -590,7 +590,7 @@
     document.getElementById('game').style.display = 'none';
     document.getElementById('win-emoji').textContent = '🤝';
     document.getElementById('win-name').textContent = 'It\'s a tie!';
-    document.getElementById('win-sub').textContent = 'Both players reached 24!';
+    document.getElementById('win-sub').textContent = 'Both players reached 26!';
     buildScorecard();
     document.getElementById('win').style.display = 'block';
   }
