@@ -447,9 +447,9 @@
 
 <!-- Win -->
 <div id="win">
-  <div class="win-emoji">🏆</div>
+  <div class="win-emoji" id="win-emoji">🏆</div>
   <div class="win-name" id="win-name"></div>
-  <div class="win-sub">reached exactly 24!</div>
+  <div class="win-sub" id="win-sub">reached exactly 24!</div>
   <div class="scorecard" id="scorecard"></div>
   <button class="play-again-btn" onclick="resetGame()">Play Again</button>
 </div>
@@ -464,7 +464,8 @@
   let players = ['', ''];
   let scores = [0, 0];
   let turn = 0; // 0 or 1
-  let history = []; // {player, points, prevScore}
+  let history = []; // {player, points, prevScore, bust}
+  let lastChance = false; // p1 gets final turn after p0 hits target
 
   // ── Setup ──
   const p1 = document.getElementById('p1-input');
@@ -484,6 +485,7 @@
     scores = [0, 0];
     turn = 0;
     history = [];
+    lastChance = false;
     document.getElementById('setup').style.display = 'none';
     document.getElementById('win').style.display = 'none';
     document.getElementById('game').style.display = 'block';
@@ -494,23 +496,50 @@
   function addScore(pts) {
     const current = scores[turn];
     const next = current + pts;
+
     if (pts > 0 && next > TARGET) {
       history.push({ player: turn, points: pts, prevScore: current, bust: true });
       showFlash('Bust! Shot doesn\'t count');
+      // if this was p1's last chance, end the game
+      if (lastChance) { render(); setTimeout(() => endGame(), 300); return; }
       turn = 1 - turn;
       render();
       return;
     }
+
     history.push({ player: turn, points: pts, prevScore: current, bust: false });
     scores[turn] = next;
+
     if (next === TARGET) {
       render();
-      setTimeout(() => showWin(turn), 300);
+      // p0 just hit target — give p1 a last chance if p1 hasn't gone this round
+      if (turn === 0 && !lastChance) {
+        lastChance = true;
+        turn = 1;
+        showFlash(players[1] + ' gets one more!');
+        render();
+        return;
+      }
+      // p1 just tied or p0 already had last-chance logic resolved
+      setTimeout(() => endGame(), 300);
       return;
     }
+
+    // if last chance and p1 didn't hit target, game over
+    if (lastChance) { render(); setTimeout(() => endGame(), 300); return; }
+
     turn = 1 - turn;
     render();
     if (pts > 0) showFlash('+' + pts);
+  }
+
+  function endGame() {
+    if (scores[0] === scores[1]) {
+      showTie();
+    } else {
+      const winner = scores[0] > scores[1] ? 0 : 1;
+      showWin(winner);
+    }
   }
 
   function undo() {
@@ -535,6 +564,7 @@
       document.getElementById('prog-pts-' + i).textContent = scores[i];
     }
     document.getElementById('turn-name').textContent = players[turn];
+    document.querySelector('.turn-label').firstChild.textContent = lastChance ? 'Last chance — ' : 'Now putting\n';
 
     // Grey out buttons that would bust
     DOTS.forEach(d => {
@@ -546,10 +576,21 @@
     document.getElementById('undo-btn').style.opacity = history.length ? '1' : '0.3';
   }
 
-  // ── Win ──
+  // ── Win / Tie ──
   function showWin(player) {
     document.getElementById('game').style.display = 'none';
+    document.getElementById('win-emoji').textContent = '🏆';
     document.getElementById('win-name').textContent = players[player];
+    document.getElementById('win-sub').textContent = 'reached exactly 24!';
+    buildScorecard();
+    document.getElementById('win').style.display = 'block';
+  }
+
+  function showTie() {
+    document.getElementById('game').style.display = 'none';
+    document.getElementById('win-emoji').textContent = '🤝';
+    document.getElementById('win-name').textContent = 'It\'s a tie!';
+    document.getElementById('win-sub').textContent = 'Both players reached 24!';
     buildScorecard();
     document.getElementById('win').style.display = 'block';
   }
@@ -621,6 +662,7 @@
     scores = [0, 0];
     turn = 0;
     history = [];
+    lastChance = false;
     document.getElementById('win').style.display = 'none';
     document.getElementById('game').style.display = 'block';
     render();
