@@ -250,18 +250,31 @@
 
     /* Undo */
     .undo-btn {
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.35);
-      font-size: 12px;
-      font-weight: 600;
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
       font-family: inherit;
-      display: block;
-      margin: 0 auto 16px;
-      padding: 4px 12px;
+      margin-bottom: 16px;
+      transition: background 0.1s, opacity 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    .undo-btn:hover { color: rgba(255,255,255,0.6); }
+    .undo-btn:hover { background: rgba(255,255,255,0.06); }
+    .undo-btn:disabled { opacity: 0.25; cursor: default; }
+    .undo-btn:disabled:hover { background: transparent; }
+    .undo-last-shot {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 600;
+    }
 
     /* Flash feedback */
     .flash {
@@ -442,7 +455,9 @@
   </div>
 
   <button class="miss-btn" onclick="addScore(0)">Miss — 0 pts</button>
-  <button class="undo-btn" id="undo-btn" onclick="undo()">↩ Undo last shot</button>
+  <button class="undo-btn" id="undo-btn" onclick="undo()">
+    ↩ Undo <span class="undo-last-shot" id="undo-label"></span>
+  </button>
 </div>
 
 <!-- Win -->
@@ -498,21 +513,19 @@
     const next = current + pts;
 
     if (pts > 0 && next > TARGET) {
-      history.push({ player: turn, points: pts, prevScore: current, bust: true });
+      history.push({ player: turn, points: pts, prevScore: current, bust: true, prevLastChance: lastChance });
       showFlash('Bust! Shot doesn\'t count');
-      // if this was p1's last chance, end the game
       if (lastChance) { render(); setTimeout(() => endGame(), 300); return; }
       turn = 1 - turn;
       render();
       return;
     }
 
-    history.push({ player: turn, points: pts, prevScore: current, bust: false });
+    history.push({ player: turn, points: pts, prevScore: current, bust: false, prevLastChance: lastChance });
     scores[turn] = next;
 
     if (next === TARGET) {
       render();
-      // p0 just hit target — give p1 a last chance if p1 hasn't gone this round
       if (turn === 0 && !lastChance) {
         lastChance = true;
         turn = 1;
@@ -520,12 +533,10 @@
         render();
         return;
       }
-      // p1 just tied or p0 already had last-chance logic resolved
       setTimeout(() => endGame(), 300);
       return;
     }
 
-    // if last chance and p1 didn't hit target, game over
     if (lastChance) { render(); setTimeout(() => endGame(), 300); return; }
 
     turn = 1 - turn;
@@ -545,8 +556,9 @@
   function undo() {
     if (!history.length) return;
     const last = history.pop();
-    scores[last.player] = last.prevScore;
+    if (!last.bust) scores[last.player] = last.prevScore;
     turn = last.player;
+    lastChance = last.prevLastChance;
     render();
   }
 
@@ -573,7 +585,17 @@
       btn.classList.toggle('bust-would', wouldBust);
     });
 
-    document.getElementById('undo-btn').style.opacity = history.length ? '1' : '0.3';
+    const undoBtn = document.getElementById('undo-btn');
+    const undoLabel = document.getElementById('undo-label');
+    if (history.length) {
+      undoBtn.disabled = false;
+      const last = history[history.length - 1];
+      const shotDesc = last.bust ? 'bust' : (last.points === 0 ? 'miss' : '+' + last.points);
+      undoLabel.textContent = '— ' + players[last.player] + ' ' + shotDesc;
+    } else {
+      undoBtn.disabled = true;
+      undoLabel.textContent = '';
+    }
   }
 
   // ── Win / Tie ──
